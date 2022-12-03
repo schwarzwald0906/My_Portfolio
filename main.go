@@ -13,10 +13,12 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-// Tweet モデルの宣言
-type Tweet struct {
+// Blog モデルの宣言
+type Blog struct {
 	gorm.Model
-	Content string `form:"content" binding:"required"`
+	Title      string `form:"title" binding:"required"`
+	Content    string `form:"content" binding:"required"`
+	PictureUrl string `form:"pictureUrl" binding:"required"`
 }
 
 // User モデルの宣言
@@ -46,7 +48,7 @@ func dbInit() {
 	db := gormConnect()
 	// コネクション解放
 	defer db.Close()
-	db.AutoMigrate(&Tweet{}) //構造体に基づいてテーブルを作成
+	db.AutoMigrate(&Blog{}) //構造体に基づいてテーブルを作成
 	db.AutoMigrate(&User{})
 }
 
@@ -73,49 +75,49 @@ func getUser(mail string) User {
 }
 
 // つぶやき登録処理
-func createTweet(content string) {
+func createBlog(title string, content string, pictureUrl string) {
 	db := gormConnect()
 	defer db.Close()
 	// Insert処理
-	db.Create(&Tweet{Content: content})
+	db.Create(&Blog{Title: title, Content: content, PictureUrl: pictureUrl})
 }
 
 // つぶやき更新
-func updateTweet(id int, tweetText string) {
+func updateBlog(id int, blogText string) {
 	db := gormConnect()
-	var tweet Tweet
-	db.First(&tweet, id)
-	tweet.Content = tweetText
-	db.Save(&tweet)
+	var blog Blog
+	db.First(&blog, id)
+	blog.Content = blogText
+	db.Save(&blog)
 	db.Close()
 }
 
 // つぶやき全件取得
-func getAllTweets() []Tweet {
+func getAllBlogs() []Blog {
 	db := gormConnect()
 
 	defer db.Close()
-	var tweets []Tweet
+	var blogs []Blog
 	// FindでDB名を指定して取得した後、orderで登録順に並び替え
-	db.Order("created_at desc").Find(&tweets)
-	return tweets
+	db.Order("created_at desc").Find(&blogs)
+	return blogs
 }
 
 // つぶやき一件取得
-func getTweet(id int) Tweet {
+func getBlog(id int) Blog {
 	db := gormConnect()
-	var tweet Tweet
-	db.First(&tweet, id)
+	var blog Blog
+	db.First(&blog, id)
 	db.Close()
-	return tweet
+	return blog
 }
 
 // つぶやき削除
-func deleteTweet(id int) {
+func deleteBlog(id int) {
 	db := gormConnect()
-	var tweet Tweet
-	db.First(&tweet, id)
-	db.Delete(&tweet)
+	var blog Blog
+	db.First(&blog, id)
+	db.Delete(&blog)
 	db.Close()
 }
 
@@ -127,8 +129,8 @@ func main() {
 
 	// 一覧
 	router.GET("/", func(c *gin.Context) {
-		tweets := getAllTweets()
-		c.HTML(200, "index.html", gin.H{"tweets": tweets})
+		blogs := getAllBlogs()
+		c.HTML(200, "index.html", gin.H{"blogs": blogs})
 	})
 
 	// ユーザー登録画面
@@ -181,17 +183,19 @@ func main() {
 		}
 	})
 
-	// つぶやき登録
+	// 記事新規作成
 	router.POST("/new", func(c *gin.Context) {
-		var form Tweet
+		var form Blog
 		// バリデーション処理
 		if err := c.Bind(&form); err != nil {
-			tweets := getAllTweets()
-			c.HTML(http.StatusBadRequest, "index.html", gin.H{"tweets": tweets, "err": err})
+			blogs := getAllBlogs()
+			c.HTML(http.StatusBadRequest, "index.html", gin.H{"blogs": blogs, "err": err})
 			c.Abort()
 		} else {
+			title := c.PostForm("title")
 			content := c.PostForm("content")
-			createTweet(content)
+			pictureUrl := c.PostForm("pictureUrl")
+			createBlog(title, content, pictureUrl)
 			c.Redirect(302, "/")
 		}
 	})
@@ -204,8 +208,8 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		tweet := getTweet(id)
-		c.HTML(200, "detail.html", gin.H{"tweet": tweet})
+		blog := getBlog(id)
+		c.HTML(200, "detail.html", gin.H{"blog": blog})
 	})
 
 	// 更新
@@ -215,8 +219,8 @@ func main() {
 		if err != nil {
 			panic("ERROR")
 		}
-		tweet := c.PostForm("tweet")
-		updateTweet(id, tweet)
+		blog := c.PostForm("blog")
+		updateBlog(id, blog)
 		c.Redirect(302, "/")
 	})
 
@@ -227,8 +231,8 @@ func main() {
 		if err != nil {
 			panic("ERROR")
 		}
-		tweet := getTweet(id)
-		c.HTML(200, "delete.html", gin.H{"tweet": tweet})
+		blog := getBlog(id)
+		c.HTML(200, "delete.html", gin.H{"blog": blog})
 	})
 
 	// 削除
@@ -238,7 +242,7 @@ func main() {
 		if err != nil {
 			panic("ERROR")
 		}
-		deleteTweet(id)
+		deleteBlog(id)
 		c.Redirect(302, "/")
 
 	})
