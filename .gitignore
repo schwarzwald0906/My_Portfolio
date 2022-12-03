@@ -1,2 +1,5 @@
 .env
 /routes
+admin_model.pu
+aggregation.pu
+user_model.pu
