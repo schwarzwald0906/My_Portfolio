@@ -22,7 +22,7 @@ type Tweet struct {
 // User モデルの宣言
 type User struct {
 	gorm.Model
-	Username string `form:"username" binding:"required" gorm:"unique;not null"`
+	Mail     string `form:"mail" binding:"required" gorm:"unique;not null"`
 	Password string `form:"password" binding:"required"`
 }
 
@@ -51,12 +51,12 @@ func dbInit() {
 }
 
 // ユーザー登録処理
-func createUser(username string, password string) []error {
+func createUser(mail string, password string) []error {
 	passwordEncrypt, _ := crypto.PasswordEncrypt(password)
 	db := gormConnect()
 	defer db.Close()
 	// Insert処理
-	if err := db.Create(&User{Username: username, Password: passwordEncrypt}).GetErrors(); err != nil {
+	if err := db.Create(&User{Mail: mail, Password: passwordEncrypt}).GetErrors(); err != nil {
 		return err
 	}
 	return nil
@@ -64,10 +64,10 @@ func createUser(username string, password string) []error {
 }
 
 // ユーザーを一件取得
-func getUser(username string) User {
+func getUser(mail string) User {
 	db := gormConnect()
 	var user User
-	db.First(&user, "username = ?", username)
+	db.First(&user, "mail = ?", mail)
 	db.Close()
 	return user
 }
@@ -145,10 +145,10 @@ func main() {
 			c.HTML(http.StatusBadRequest, "signup.html", gin.H{"err": err})
 			c.Abort()
 		} else {
-			username := c.PostForm("username")
+			mail := c.PostForm("mail")
 			password := c.PostForm("password")
 			// 登録ユーザーが重複していた場合にはじく処理
-			if err := createUser(username, password); err != nil {
+			if err := createUser(mail, password); err != nil {
 				c.HTML(http.StatusBadRequest, "signup.html", gin.H{"err": err})
 			}
 			c.Redirect(302, "/")
@@ -165,7 +165,7 @@ func main() {
 	router.POST("/login", func(c *gin.Context) {
 
 		// DBから取得したユーザーパスワード(Hash)
-		dbPassword := getUser(c.PostForm("username")).Password
+		dbPassword := getUser(c.PostForm("mail")).Password
 		log.Println(dbPassword)
 		// フォームから取得したユーザーパスワード
 		formPassword := c.PostForm("password")
