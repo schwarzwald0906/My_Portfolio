@@ -33,7 +33,7 @@ func gormConnect() *gorm.DB {
 	USER := "root"
 	PASS := "Velden5425!"
 	DBNAME := "test"
-	// MySQLだと文字コードの問題で"?parseTime=true"を末尾につける必要がある
+	// MySQL だと文字コードの問題で"?parseTime=true"を末尾につける必要がある
 	CONNECT := USER + ":" + PASS + "@/" + DBNAME + "?parseTime=true"
 	db, err := gorm.Open(DBMS, CONNECT)
 
