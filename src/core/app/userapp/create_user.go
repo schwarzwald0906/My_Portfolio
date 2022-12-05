@@ -1,6 +1,8 @@
 package userapp
 
 import (
+	"context"
+
 	"github.com/ymdd1/mytweet/src/core/domain/userdm"
 	"github.com/ymdd1/mytweet/src/core/domain/vo"
 )
@@ -16,30 +18,42 @@ func NewCreateUserApp(userRepo userdm.UserRepository) *CreateUserApp {
 }
 
 type CreateUserRequest struct {
-	Email    string
-	Password string
+	Email      vo.Email
+	Password   vo.Password
+	Created_at vo.Created_at
+	Updated_at vo.Updated_at
 }
 
 type CreateUserResponse struct {
 	ID string
 }
 
-func (app *CreateUserApp) Exec(req *CreateUserRequest) (*CreateUserResponse, error) {
-	// email, err := vo.NewEmail(req.Email)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	password, err := vo.NewPassword(req.Password)
+func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
+	email, err := vo.NewEmail(req.Email.Value())
+	if err != nil {
+		return nil, err
+	}
+	password, err := vo.NewPassword(req.Password.Value())
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := userdm.NewUser(userdm.NewUserID(), req.Email, password)
+	created_at, err := vo.NewCreated_at(req.Created_at.Value())
 	if err != nil {
 		return nil, err
 	}
 
-	createdUser, err := app.userRepository.Create(user)
+	updated_at, err := vo.NewUpdated_at(req.Updated_at.Value())
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := userdm.NewUser(userdm.NewUserID(), email, password, created_at, updated_at)
+	if err != nil {
+		return nil, err
+	}
+
+	createdUser, err := app.userRepository.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}

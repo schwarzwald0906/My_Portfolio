@@ -11,7 +11,7 @@ func NewUserID() UserID {
 	return UserID(uuid.New().String())
 }
 
-func NewUserIDWithStr(id string) (UserID, error) {
+func NewUserIDByStr(id string) (UserID, error) {
 	if id == "" {
 		return "", xerrors.New("user id  must be not empty")
 	}

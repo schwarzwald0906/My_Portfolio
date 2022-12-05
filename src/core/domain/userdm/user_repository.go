@@ -1,6 +1,8 @@
 package userdm
 
+import "context"
+
 type UserRepository interface {
-	Create(user *User) (*User, error)
-	FindByID(userID UserID) (*User, error)
+	Create(ctx context.Context, user *User) (*User, error)
+	FindByID(ctx context.Context, userID string) (*User, error)
 }

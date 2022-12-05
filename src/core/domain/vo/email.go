@@ -14,7 +14,10 @@ var (
 	emailRegExp = regexp.MustCompile(emailFormat)
 )
 
-const emailMaxLength = 256
+// メールは、英数字記号50文字以下とする。
+// ※余裕があれば、RFCに準拠。→未実装
+// メールはユニークとする。→未実装
+const emailMaxLength = 50
 
 func NewEmail(email string) (Email, error) {
 	if len(email) == 0 {

@@ -7,13 +7,16 @@ import (
 
 type Password string
 
+// パスワードは、英数字記号8文字以上30文字以下とする。
+//
+//	※余裕があれば、必ず大文字小文字数字を使わなければならないとする。→未実装
 func NewPassword(pass string) (Password, error) {
 	if pass == "" {
 		return "", xerrors.New("password must be not empty")
 	}
 
-	if l := len(pass); l > 30 || l < 12 {
-		return "", xerrors.New("password must be from 12 to 30 characters")
+	if l := len(pass); l > 31 || l < 9 {
+		return "", xerrors.New("password must be from 8 to 30 characters")
 	}
 
 	hashPass, err := bcrypt.GenerateFromPassword([]byte(pass), 10)
