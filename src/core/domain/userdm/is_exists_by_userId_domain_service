@@ -11,7 +11,7 @@ func NewUserDomainService(userRepo UserRepository) *UserDomainService {
 }
 
 func (ds *UserDomainService) IsExists(ctx context.Context, userID string) (bool, error) {
-	_, err := ds.userRepository.FindByID(ctx, userID)
+	err := ds.userRepository.FindByUserID(ctx, userID)
 	if err != nil {
 		return false, err
 	}

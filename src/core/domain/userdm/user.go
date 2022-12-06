@@ -5,24 +5,24 @@ import (
 )
 
 type User struct {
-	id         UserID
-	email      vo.Email
-	password   vo.Password
-	created_at vo.Created_at
-	updated_at vo.Updated_at
+	id        vo.UserId
+	email     vo.Email
+	password  vo.Password
+	createdAt vo.CreatedAt
+	updatedAt vo.UpdatedAt
 }
 
-func NewUser(id UserID, email vo.Email, password vo.Password, created_at vo.Created_at, updated_at vo.Updated_at) (*User, error) {
+func NewUser(id vo.UserId, email vo.Email, password vo.Password, createdAt vo.CreatedAt, updatedAt vo.UpdatedAt) (*User, error) {
 	return &User{
-		id:         id,
-		email:      email,
-		password:   password,
-		created_at: created_at,
-		updated_at: updated_at,
+		id:        id,
+		email:     email,
+		password:  password,
+		createdAt: createdAt,
+		updatedAt: updatedAt,
 	}, nil
 }
 
-func (u *User) ID() UserID {
+func (u *User) ID() vo.UserId {
 	return u.id
 }
 func (u *User) Email() vo.Email {
@@ -31,12 +31,13 @@ func (u *User) Email() vo.Email {
 func (u *User) Password() vo.Password {
 	return u.password
 }
-func (u *User) Created_at() vo.Created_at {
-	return u.created_at
+func (u *User) CreatedAt() vo.CreatedAt {
+	return u.createdAt
 }
-func (u *User) Updated_at() vo.Updated_at {
-	return u.updated_at
+func (u *User) UpdatedAt() vo.UpdatedAt {
+	return u.updatedAt
 }
-func (u *User) Equals(u2 *User) bool {
-	return u.id.Equals(u2.id)
-}
+
+// func (u *User) Equals(u2 *User) bool {
+// 	return u.id.Equals(u2.id)
+// }

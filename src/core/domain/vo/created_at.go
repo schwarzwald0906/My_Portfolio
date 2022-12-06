@@ -1,11 +1,15 @@
 package vo
 
-type Created_at string
+import "time"
 
-func NewCreated_at(created_at string) (Created_at, error) {
-	return Created_at(created_at), nil
+type CreatedAt time.Time
+
+func NewCreatedAt() CreatedAt {
+	return CreatedAt(time.Now())
 }
-
-func (e Created_at) Value() string {
-	return string(e)
+func NewCreatedAtByVal(val time.Time) CreatedAt {
+	return CreatedAt(time.Now())
+}
+func (e CreatedAt) Value() time.Time {
+	return time.Time(e)
 }

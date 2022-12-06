@@ -2,6 +2,7 @@ package userapp
 
 import (
 	"context"
+	"time"
 
 	"github.com/ymdd1/mytweet/src/core/domain/userdm"
 	"github.com/ymdd1/mytweet/src/core/domain/vo"
@@ -18,44 +19,46 @@ func NewCreateUserApp(userRepo userdm.UserRepository) *CreateUserApp {
 }
 
 type CreateUserRequest struct {
-	Email      vo.Email
-	Password   vo.Password
-	Created_at vo.Created_at
-	Updated_at vo.Updated_at
+	Email     string
+	Password  string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type CreateUserResponse struct {
-	ID string
+	ID vo.UserId
 }
 
 func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
-	email, err := vo.NewEmail(req.Email.Value())
-	if err != nil {
-		return nil, err
-	}
-	password, err := vo.NewPassword(req.Password.Value())
-	if err != nil {
-		return nil, err
-	}
+	// email, err := vo.NewEmail(req.Email.Value())
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// password, err := vo.NewPassword(req.Password.Value())
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	created_at, err := vo.NewCreated_at(req.Created_at.Value())
-	if err != nil {
-		return nil, err
-	}
+	// createdAt, err := vo.NewCreatedAt(req.CreatedAt.Value())
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	updated_at, err := vo.NewUpdated_at(req.Updated_at.Value())
-	if err != nil {
-		return nil, err
-	}
+	// updatedAt, err := vo.NewUpdatedAt(req.UpdatedAt.Value())
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	user, err := userdm.NewUser(userdm.NewUserID(), email, password, created_at, updated_at)
-	if err != nil {
-		return nil, err
-	}
+	// user, err := userdm.NewUser(userdm.NewUserID(), email, password, createdAt, updatedAt)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	createdUser, err := app.userRepository.Create(ctx, user)
+	user, err := userdm.GenWhenCreate(vo.Email(req.Email), vo.Password(req.Password))
+
+	app.userRepository.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}
-	return &CreateUserResponse{ID: createdUser.ID().String()}, nil
+	return &CreateUserResponse{ID: vo.UserId(createdUser.ID())}, nil
 }

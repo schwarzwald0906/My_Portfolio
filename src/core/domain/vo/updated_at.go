@@ -1,11 +1,15 @@
 package vo
 
-type Updated_at string
+import "time"
 
-func NewUpdated_at(updated_at string) (Updated_at, error) {
-	return Updated_at(updated_at), nil
+type UpdatedAt time.Time
+
+func NewUpdatedAt() UpdatedAt {
+	return UpdatedAt(time.Now())
 }
-
-func (e Updated_at) Value() string {
-	return string(e)
+func NewUpdatedAtByVal(val time.Time) UpdatedAt {
+	return UpdatedAt(time.Now())
+}
+func (e UpdatedAt) Value() time.Time {
+	return time.Time(e)
 }
