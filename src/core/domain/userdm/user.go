@@ -5,14 +5,14 @@ import (
 )
 
 type User struct {
-	id        vo.UserId
+	id        UserID
 	email     vo.Email
 	password  vo.Password
 	createdAt vo.CreatedAt
 	updatedAt vo.UpdatedAt
 }
 
-func NewUser(id vo.UserId, email vo.Email, password vo.Password, createdAt vo.CreatedAt, updatedAt vo.UpdatedAt) (*User, error) {
+func newUser(id UserID, email vo.Email, password vo.Password, createdAt vo.CreatedAt, updatedAt vo.UpdatedAt) (*User, error) {
 	return &User{
 		id:        id,
 		email:     email,
@@ -22,7 +22,7 @@ func NewUser(id vo.UserId, email vo.Email, password vo.Password, createdAt vo.Cr
 	}, nil
 }
 
-func (u *User) ID() vo.UserId {
+func (u *User) ID() UserID {
 	return u.id
 }
 func (u *User) Email() vo.Email {

@@ -25,19 +25,19 @@ type CreateUserRequest struct {
 	UpdatedAt time.Time
 }
 
-type CreateUserResponse struct {
-	ID vo.UserId
-}
+// type CreateUserResponse struct {
+// 	ID vo.UserId
+// }
 
-func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
-	// email, err := vo.NewEmail(req.Email.Value())
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// password, err := vo.NewPassword(req.Password.Value())
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) error {
+	email, err := vo.NewEmail(req.Email)
+	if err != nil {
+		return err
+	}
+	password, err := vo.NewPassword(req.Password)
+	if err != nil {
+		return err
+	}
 
 	// createdAt, err := vo.NewCreatedAt(req.CreatedAt.Value())
 	// if err != nil {
@@ -54,11 +54,16 @@ func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) (*Cr
 	// 	return nil, err
 	// }
 
-	user, err := userdm.GenWhenCreate(vo.Email(req.Email), vo.Password(req.Password))
-
-	app.userRepository.Create(ctx, user)
+	//入力値からドメインモデルを取得
+	user, err := userdm.GenWhenCreate(email, password)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &CreateUserResponse{ID: vo.UserId(createdUser.ID())}, nil
+
+	//上記で作成したuserをもとにINSERT処理を実行
+	err = app.userRepository.Create(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }

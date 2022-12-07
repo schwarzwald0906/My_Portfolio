@@ -1,19 +1,20 @@
 package userdm
 
-import "context"
+import (
+	"context"
 
-type EmailDomainService struct {
-	emailRepository EmailRepository
+	"github.com/ymdd1/mytweet/src/core/domain/vo"
+)
+
+type IsDuplicatedByEmailDomainService struct {
+	userRepository UserRepository
 }
 
-func NewEmailDomainService(emailRepo EmailRepository) *EmailDomainService {
-	return &EmailDomainService{emailRepository: emailRepo}
+func NewEmailDomainService(userRepo UserRepository) *IsDuplicatedByEmailDomainService {
+	return &IsDuplicatedByEmailDomainService{userRepository: userRepo}
 }
 
-func (ds *EmailDomainService) IsExists(ctx context.Context, email string) (bool, error) {
-	err := ds.emailRepository.FindByEmailID(ctx, email)
-	if err != nil {
-		return false, err
-	}
-	return true, nil
+func (ds *IsDuplicatedByEmailDomainService) IsExists(ctx context.Context, email vo.Email) bool {
+	user, err := ds.userRepository.FindByEmailID(ctx, email)
+	return !(err != nil || user == nil)
 }

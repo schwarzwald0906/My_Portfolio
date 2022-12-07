@@ -10,10 +10,7 @@ func NewUserDomainService(userRepo UserRepository) *UserDomainService {
 	return &UserDomainService{userRepository: userRepo}
 }
 
-func (ds *UserDomainService) IsExists(ctx context.Context, userID string) (bool, error) {
-	err := ds.userRepository.FindByUserID(ctx, userID)
-	if err != nil {
-		return false, err
-	}
-	return true, nil
+func (ds *UserDomainService) IsExists(ctx context.Context, UserID) bool {
+	user,err := ds.userRepository.FindByUserID(ctx, userID)
+	return !(err != nil || user == nil)
 }

@@ -1,9 +1,13 @@
 package userdm
 
-import "context"
+import (
+	"context"
+
+	"github.com/ymdd1/mytweet/src/core/domain/vo"
+)
 
 type UserRepository interface {
-	Create(ctx context.Context, user *User) (*User, error)
-	FindByUserID(ctx context.Context, userID string) error
-	FindByEmailID(ctx context.Context, email string) error
+	Create(ctx context.Context, user *User) error
+	FindByUserID(ctx context.Context, userId vo.UserId) (*User, error)
+	FindByEmailID(ctx context.Context, email vo.Email) (*User, error)
 }

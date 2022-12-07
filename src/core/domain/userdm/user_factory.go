@@ -5,5 +5,5 @@ import (
 )
 
 func GenWhenCreate(email vo.Email, password vo.Password) (*User, error) {
-	return NewUser(vo.NewUserID(), email, password, vo.NewCreatedAt(), vo.NewUpdatedAt())
+	return newUser(NewUserID(), email, password, vo.NewCreatedAt(), vo.NewUpdatedAt())
 }
