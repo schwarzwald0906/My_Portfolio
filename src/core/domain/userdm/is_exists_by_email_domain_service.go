@@ -14,7 +14,10 @@ func NewEmailDomainService(userRepo UserRepository) *IsDuplicatedByEmailDomainSe
 	return &IsDuplicatedByEmailDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByEmailDomainService) IsExists(ctx context.Context, email vo.Email) bool {
+func (ds *IsDuplicatedByEmailDomainService) IsExists(ctx context.Context, email vo.Email) (bool, error) {
 	user, err := ds.userRepository.FindByEmailID(ctx, email)
-	return !(err != nil || user == nil)
+	if err != nil {
+		return false, err
+	}
+	return user != nil, nil
 }

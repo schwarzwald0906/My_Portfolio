@@ -4,11 +4,11 @@ import "time"
 
 type CreatedAt time.Time
 
-func NewCreatedAt() CreatedAt {
-	return CreatedAt(time.Now())
+func NewCreatedAt() (CreatedAt, error) {
+	return CreatedAt(time.Now()), nil
 }
-func NewCreatedAtByVal(val time.Time) CreatedAt {
-	return CreatedAt(time.Now())
+func NewCreatedAtByVal(val time.Time) (CreatedAt, error) {
+	return CreatedAt(val), nil
 }
 func (e CreatedAt) Value() time.Time {
 	return time.Time(e)

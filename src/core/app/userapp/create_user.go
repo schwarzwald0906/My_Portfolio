@@ -39,21 +39,6 @@ func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) erro
 		return err
 	}
 
-	// createdAt, err := vo.NewCreatedAt(req.CreatedAt.Value())
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// updatedAt, err := vo.NewUpdatedAt(req.UpdatedAt.Value())
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// user, err := userdm.NewUser(userdm.NewUserID(), email, password, createdAt, updatedAt)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	//入力値からドメインモデルを取得
 	user, err := userdm.GenWhenCreate(email, password)
 	if err != nil {
