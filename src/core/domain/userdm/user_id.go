@@ -2,10 +2,11 @@ package userdm
 
 import (
 	"github.com/google/uuid"
+	"github.com/ymdd1/mytweet/src/core/domain/vo"
 	"golang.org/x/xerrors"
 )
 
-type UserID string
+type UserID vo.ID
 
 func NewUserID() UserID {
 	return UserID(uuid.New().String())

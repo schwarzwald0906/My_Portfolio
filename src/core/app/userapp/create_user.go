@@ -46,9 +46,5 @@ func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) erro
 	}
 
 	//上記で作成したuserをもとにINSERT処理を実行
-	err = app.userRepository.Create(ctx, user)
-	if err != nil {
-		return err
-	}
-	return nil
+	return app.userRepository.Create(ctx, user)
 }
