@@ -10,7 +10,7 @@ type IsDuplicatedByEmailDomainService struct {
 	userRepository UserRepository
 }
 
-func NewEmailDomainService(userRepo UserRepository) *IsDuplicatedByEmailDomainService {
+func NewIsDuplicatedByEmailDomainService(userRepo UserRepository) *IsDuplicatedByEmailDomainService {
 	return &IsDuplicatedByEmailDomainService{userRepository: userRepo}
 }
 

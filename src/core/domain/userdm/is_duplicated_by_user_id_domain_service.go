@@ -4,15 +4,15 @@ import (
 	"context"
 )
 
-type IsDuplicatedByUserIdDomainService struct {
+type IsDuplicatedByUserIDDomainService struct {
 	userRepository UserRepository
 }
 
-func NewUserDomainService(userRepo UserRepository) *IsDuplicatedByUserIdDomainService {
-	return &IsDuplicatedByUserIdDomainService{userRepository: userRepo}
+func NewIsDuplicatedByUserIDDomainService(userRepo UserRepository) *IsDuplicatedByUserIDDomainService {
+	return &IsDuplicatedByUserIDDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByUserIdDomainService) Exec(ctx context.Context, userID UserID) (bool, error) {
+func (ds *IsDuplicatedByUserIDDomainService) Exec(ctx context.Context, userID UserID) (bool, error) {
 	user, err := ds.userRepository.FindByUserID(ctx, userID)
 	if err != nil {
 		return false, err

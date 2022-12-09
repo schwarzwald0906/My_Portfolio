@@ -15,5 +15,5 @@ func GenWhenCreate(email vo.Email, password vo.Password) (*User, error) {
 		return nil, err
 	}
 
-	return newUser(NewUserID(), email, password, createdAt, updatedAt)
+	return newUser(UserID(NewUserID()), email, password, createdAt, updatedAt)
 }
