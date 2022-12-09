@@ -12,7 +12,7 @@ func NewUserDomainService(userRepo UserRepository) *IsDuplicatedByUserIdDomainSe
 	return &IsDuplicatedByUserIdDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByUserIdDomainService) IsExists(ctx context.Context, userID UserID) (bool, error) {
+func (ds *IsDuplicatedByUserIdDomainService) Exec(ctx context.Context, userID UserID) (bool, error) {
 	user, err := ds.userRepository.FindByUserID(ctx, userID)
 	if err != nil {
 		return false, err
