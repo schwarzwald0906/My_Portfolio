@@ -10,10 +10,6 @@ func NewUserID() vo.ID {
 	return vo.NewID()
 }
 
-// func NewUserID() UserID {
-// 	return UserID(uuid.New().String())
-// }
-
 func NewUserIDByStr(idStr string) (UserID, error) {
 	id, err := vo.NewIDByStr(idStr)
 	return UserID(id), err
