@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	id        UserID
-	email     vo.Email
+	email     vo.Email `db:"email"`
 	password  vo.Password
 	createdAt vo.CreatedAt
 	updatedAt vo.UpdatedAt
