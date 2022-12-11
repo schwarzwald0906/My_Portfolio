@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ymdd1/mytweet/src/core/app/userapp"
-	"github.com/ymdd1/mytweet/src/core/domain/userdm"
-	"github.com/ymdd1/mytweet/src/core/infra/repoimpl"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/app/userapp"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
 
 func main() {

@@ -1,8 +1,6 @@
 package userdm
 
-import (
-	"github.com/ymdd1/mytweet/src/core/domain/vo"
-)
+import "github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 
 type User struct {
 	id        UserID

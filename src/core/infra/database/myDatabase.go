@@ -3,17 +3,16 @@ package myDatabase
 import (
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
 // DbInit() データベースに接続する。
 func DbInit() *sqlx.DB {
 
-	DBMS := os.Getenv("DBMS")
-	USER := os.Getenv("USER")
-	PASS := os.Getenv("PASSWORD")
-	DBNAME := os.Getenv("DBNAME")
+	DBMS := os.Getenv("mysql")
+	USER := os.Getenv("user")
+	PASS := os.Getenv("password")
+	DBNAME := os.Getenv("mydb")
 	CONNECT := USER + ":" + PASS + "@/" + DBNAME + "?parseTime=true"
 
 	conn, err := sqlx.Open(DBMS, CONNECT)

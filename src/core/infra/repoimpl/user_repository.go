@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/ymdd1/mytweet/src/core/domain/userdm"
-	"github.com/ymdd1/mytweet/src/core/domain/vo"
-	myDatabase "github.com/ymdd1/mytweet/src/core/infra/database"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
+	myDatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 )
 
 type UserRepoImpl struct {
