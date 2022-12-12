@@ -18,7 +18,7 @@ func NewPassword(pass string) (Password, error) {
 	}
 
 	if l := len(pass); l > 31 || l < 9 {
-		return "", xerrors.New("パスワードは、英数字記号8文字以上30文字以下で入力してください")
+		return "", xerrors.Errorf("パスワードは、英数字記号8文字以上30文字以下で入力してください。現在%s文字入力されています。", pass)
 	}
 
 	if !(regexp.MustCompile("^[0-9a-zA-Z!-/:-@[-`{-~]+$").Match([]byte(pass))) { // 英数字記号以外を使っているか判定
