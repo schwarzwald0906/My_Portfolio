@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"database/sql"
@@ -10,13 +10,13 @@ import (
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
 
-func main() {
-	// Gin のルーターを作成
-	r := gin.Default()
+// ルーティングを別の関数やメソッドに分割
+func SetupRoutes(router *gin.Engine) {
+	router.GET("/users", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "user list"})
+	})
 
-	// ユーザー作成ボタンを押下したときの処理
-	r.POST("/users", func(c *gin.Context) {
-
+	router.POST("/users", func(c *gin.Context) {
 		// 正常系
 		if isHealthy() {
 			c.String(http.StatusOK, "ok")
@@ -44,12 +44,20 @@ func main() {
 		// レスポンスを返す
 		c.JSON(201, nil)
 	})
-
-	// Web サーバーを起動
-	r.Run()
 }
 
 // ヘルスチェック処理
 func isHealthy() bool {
 	return true
 }
+
+// ユーザー用のコントローラーを作成する
+// ctrl := UserController{}
+
+// v1 := engine.Group("/v1")
+// {
+// 	// コントローラを通して、出力したい場合。
+// 	v1.GET("/login", ctrl.login)
+// 	v1.GET("/signup", ctrl.signup)
+// 	v1.POST("/signup", ctrl.signup)
+// }

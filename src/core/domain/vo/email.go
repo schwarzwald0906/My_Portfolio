@@ -23,7 +23,7 @@ func NewEmail(email string) (Email, error) {
 	}
 
 	if len(email) > emailMaxLength {
-		return Email(""), xerrors.Errorf("メールアドレスは50文字以下で入力してください")
+		return Email(""), xerrors.Errorf("メールアドレスを、%d 文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
 	}
 
 	if ok := emailRegExp.MatchString(email); !ok {

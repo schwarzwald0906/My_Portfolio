@@ -1,21 +1,21 @@
 package repoimpl
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
+	"html/template"
 	"log"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
-	myDatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
+	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/datamodel"
 )
 
 type UserRepoImpl struct {
-	ID        vo.ID        `db:"id"`
-	Email     vo.Email     `db:"email"`
-	Password  vo.Password  `db:"password"`
-	CreatedAt vo.CreatedAt `db:"created_at"`
-	UpdatedAt vo.UpdatedAt `db:"updated_at"`
+	db *sqlx.DB
 }
 
 // データベースのコネクションを外側から渡せるようにすることでテストが容易になります。
@@ -24,83 +24,127 @@ type UserRepoImpl struct {
 // 構造体がインタフェースを満たしていない場合はコンパイルエラーになるのですぐに気付けて便利です。
 func NewUserRepository(db *sql.DB) userdm.UserRepository {
 	return &UserRepoImpl{
-		ID:        "",
-		Email:     "",
-		Password:  "",
-		CreatedAt: vo.CreatedAt{},
-		UpdatedAt: vo.UpdatedAt{},
+		db: &sqlx.DB{},
 	}
 }
 
 // Create implements userdm.UserRepository
 func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	//データベース接続
-	db := myDatabase.DbInit()
+	repo.db = mydatabase.DbInit()
 
-	//SQL文定義
-	sql := `INSERT INTO user
-				(id, email, password,created_at, updated_at)
-			VALUES
-				(:id,:email,:password,:created_at,:updated_at);`
+	// テンプレートをパースする
+	tmpl, err := template.ParseFiles("create_user.sql")
+	if err != nil {
+		return err
+	}
 
-	err := db.QueryRow(sql, repo.ID, repo.Email, repo.Password, repo.CreatedAt, repo.UpdatedAt).Scan(&repo)
+	// テンプレートを埋め込んだ結果を出力する
+	var buf bytes.Buffer
+
+	// テンプレートに値を代入する
+	data := map[string]string{
+		"UserId":    user.ID().String(),
+		"Email":     user.Email().Value(),
+		"Password":  user.Password().Value(),
+		"CreatedAt": user.CreatedAt().Value().String(),
+		"UpdatedAt": user.UpdatedAt().Value().String(),
+	}
+
+	tmpl.Execute(&buf, data)
+
+	// 埋め込まれたSQLクエリを文字列として取得する
+	sql := buf.String()
+
+	err = repo.db.QueryRow(sql).Scan(&repo)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer db.Close()
+	defer repo.db.Close()
 	return nil
 
 }
 
 // FindByEmailID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*userdm.User, error) {
+	var scanuser datamodel.User
+	var dmuser *userdm.User
+
 	//データベース接続
-	db := myDatabase.DbInit()
+	repo.db = mydatabase.DbInit()
 
-	//SQL文定義
-	sql := `SELECT 
-				*
-			FROM
-				user  
-			WHERE
-				user.email = ?;`
-
-	var user *userdm.User
-	rows, err := db.Queryx(sql, repo.Email)
+	// テンプレートをパースする
+	tmpl, err := template.ParseFiles("find_by_email.sql")
 	if err != nil {
-		return user, err
+		return dmuser, err
 	}
-	if err := rows.StructScan(user); err != nil {
-		return user, err
+
+	// テンプレートに値を代入する
+	data := map[string]string{
+		"Email": email.Value(),
 	}
-	rows.StructScan(user)
-	defer db.Close()
-	return user, nil
+
+	// テンプレートを埋め込んだ結果を出力する
+	var buf bytes.Buffer
+	tmpl.Execute(&buf, data)
+
+	// 埋め込まれたSQLクエリを文字列として取得する
+	sql := buf.String()
+
+	//単一行を返却するため、QueryRow,Scan
+	err = repo.db.QueryRow(sql).Scan(&scanuser)
+	if err != nil {
+		return dmuser, err
+	}
+	// scanuserからdomainmuserへ型変換
+	dmuser, err = userdm.Reconstruct(scanuser.ID(), scanuser.Email(), scanuser.Password(), scanuser.CreatedAt(), scanuser.UpdatedAt())
+
+	if err != nil {
+		return dmuser, err
+	}
+	defer repo.db.Close()
+	return dmuser, nil
 
 }
 
 // FindByUserID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID) (*userdm.User, error) {
+	var scanuser datamodel.User
+	var dmuser *userdm.User
+
 	//データベース接続
-	db := myDatabase.DbInit()
+	repo.db = mydatabase.DbInit()
 
-	//SQL文定義
-	sql := `SELECT 
-				*
-			FROM
-				user  
-			WHERE
-				user.userId = ?;`
-
-	var user *userdm.User
-	rows, err := db.Queryx(sql, repo.ID)
+	// テンプレートをパースする
+	tmpl, err := template.ParseFiles("find_by_user_id.sql")
 	if err != nil {
-		return user, err
+		return dmuser, err
 	}
-	if err := rows.StructScan(user); err != nil {
-		return user, err
+
+	// テンプレートに値を代入する
+	data := map[string]string{
+		"UserId": userId.String(),
 	}
-	rows.StructScan(user)
-	defer db.Close()
-	return user, nil
+
+	// テンプレートを埋め込んだ結果を出力する
+	var buf bytes.Buffer
+	tmpl.Execute(&buf, data)
+
+	// 埋め込まれたSQLクエリを文字列として取得する
+	sql := buf.String()
+
+	//単一行を返却するため、QueryRow,Scan
+	err = repo.db.QueryRow(sql).Scan(&scanuser)
+	if err != nil {
+		return dmuser, err
+	}
+	// scanuserからdomainmuserへ型変換
+	dmuser, err = userdm.Reconstruct(scanuser.ID(), scanuser.Email(), scanuser.Password(), scanuser.CreatedAt(), scanuser.UpdatedAt())
+
+	if err != nil {
+		return dmuser, err
+	}
+	defer repo.db.Close()
+
+	return dmuser, nil
 }

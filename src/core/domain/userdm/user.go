@@ -1,10 +1,14 @@
 package userdm
 
-import "github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
+import (
+	"time"
+
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
+)
 
 type User struct {
 	id        UserID
-	email     vo.Email `db:"email"`
+	email     vo.Email
 	password  vo.Password
 	createdAt vo.CreatedAt
 	updatedAt vo.UpdatedAt
@@ -20,9 +24,43 @@ func newUser(id UserID, email vo.Email, password vo.Password, createdAt vo.Creat
 	}, nil
 }
 
+func Reconstruct(id string, email string, password string, createdat time.Time, upadatedat time.Time) (*User, error) {
+	var user *User
+
+	newid, err := NewUserIDByStr(id)
+	if err != nil {
+		return user, err
+	}
+	newemail, err := vo.NewEmail(email)
+	if err != nil {
+		return user, err
+	}
+	newpassword, err := vo.NewPassword(password)
+	if err != nil {
+		return user, err
+	}
+	newcreatedat, err := vo.NewCreatedAtByVal(createdat)
+	if err != nil {
+		return user, err
+	}
+	newupadatedat, err := vo.NewUpdatedAtByVal(upadatedat)
+	if err != nil {
+		return user, err
+	}
+
+	return &User{
+		id:        newid,
+		email:     newemail,
+		password:  newpassword,
+		createdAt: newcreatedat,
+		updatedAt: newupadatedat,
+	}, nil
+}
+
 func (u *User) ID() UserID {
 	return u.id
 }
+
 func (u *User) Email() vo.Email {
 	return u.email
 }
