@@ -1,18 +1,21 @@
 package repoimpl
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
-	"html/template"
+	"embed"
 	"log"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx/reflectx"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/datamodel"
 )
+
+//go:embed embed/*.sql
+var emb embed.FS
 
 type UserRepoImpl struct {
 	db *sqlx.DB
@@ -24,7 +27,10 @@ type UserRepoImpl struct {
 // 構造体がインタフェースを満たしていない場合はコンパイルエラーになるのですぐに気付けて便利です。
 func NewUserRepository(db *sql.DB) userdm.UserRepository {
 	return &UserRepoImpl{
-		db: &sqlx.DB{},
+		db: &sqlx.DB{
+			DB:     db,
+			Mapper: &reflectx.Mapper{},
+		},
 	}
 }
 
@@ -33,30 +39,28 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	//データベース接続
 	repo.db = mydatabase.DbInit()
 
-	// テンプレートをパースする
-	tmpl, err := template.ParseFiles("create_user.sql")
+	// go-embed
+	tmpl, err := emb.ReadFile("sql/create_user.sql")
 	if err != nil {
 		return err
 	}
+	p := string(tmpl)
 
-	// テンプレートを埋め込んだ結果を出力する
-	var buf bytes.Buffer
-
-	// テンプレートに値を代入する
-	data := map[string]string{
-		"UserId":    user.ID().String(),
-		"Email":     user.Email().Value(),
-		"Password":  user.Password().Value(),
-		"CreatedAt": user.CreatedAt().Value().String(),
-		"UpdatedAt": user.UpdatedAt().Value().String(),
+	// プリペアドステートメントを作成
+	stmt, err := repo.db.Prepare(p)
+	if err != nil {
+		panic(err.Error())
 	}
+	defer stmt.Close()
 
-	tmpl.Execute(&buf, data)
+	id := user.ID()
+	email := user.Email()
+	password := user.Password()
+	createdat := user.CreatedAt()
+	updatedat := user.UpdatedAt()
 
-	// 埋め込まれたSQLクエリを文字列として取得する
-	sql := buf.String()
-
-	err = repo.db.QueryRow(sql).Scan(&repo)
+	// パラメータを渡してクエリを実行
+	err = stmt.QueryRow(id, email, password, createdat, updatedat).Scan(&repo)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -73,29 +77,26 @@ func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*u
 	//データベース接続
 	repo.db = mydatabase.DbInit()
 
-	// テンプレートをパースする
-	tmpl, err := template.ParseFiles("find_by_email.sql")
+	// go-embed
+	tmpl, err := emb.ReadFile("sql/find_by_email.sql")
+	if err != nil {
+		return dmuser, err
+	}
+	p := string(tmpl)
+
+	// プリペアドステートメントを作成
+	stmt, err := repo.db.Prepare(p)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer stmt.Close()
+
+	// パラメータを渡してクエリを実行
+	err = stmt.QueryRow(email).Scan(&scanuser)
 	if err != nil {
 		return dmuser, err
 	}
 
-	// テンプレートに値を代入する
-	data := map[string]string{
-		"Email": email.Value(),
-	}
-
-	// テンプレートを埋め込んだ結果を出力する
-	var buf bytes.Buffer
-	tmpl.Execute(&buf, data)
-
-	// 埋め込まれたSQLクエリを文字列として取得する
-	sql := buf.String()
-
-	//単一行を返却するため、QueryRow,Scan
-	err = repo.db.QueryRow(sql).Scan(&scanuser)
-	if err != nil {
-		return dmuser, err
-	}
 	// scanuserからdomainmuserへ型変換
 	dmuser, err = userdm.Reconstruct(scanuser.ID(), scanuser.Email(), scanuser.Password(), scanuser.CreatedAt(), scanuser.UpdatedAt())
 
@@ -112,29 +113,25 @@ func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID
 	var scanuser datamodel.User
 	var dmuser *userdm.User
 
-	//データベース接続
+	// データベース接続
 	repo.db = mydatabase.DbInit()
 
-	// テンプレートをパースする
-	tmpl, err := template.ParseFiles("find_by_user_id.sql")
+	// go-embed
+	tmpl, err := emb.ReadFile("sql/find_by_user_id.sql")
 	if err != nil {
 		return dmuser, err
 	}
+	p := string(tmpl)
 
-	// テンプレートに値を代入する
-	data := map[string]string{
-		"UserId": userId.String(),
+	// プリペアドステートメントを作成
+	stmt, err := repo.db.Prepare(p)
+	if err != nil {
+		panic(err.Error())
 	}
+	defer stmt.Close()
 
-	// テンプレートを埋め込んだ結果を出力する
-	var buf bytes.Buffer
-	tmpl.Execute(&buf, data)
-
-	// 埋め込まれたSQLクエリを文字列として取得する
-	sql := buf.String()
-
-	//単一行を返却するため、QueryRow,Scan
-	err = repo.db.QueryRow(sql).Scan(&scanuser)
+	// パラメータを渡してクエリを実行
+	err = stmt.QueryRow(userId).Scan(&scanuser)
 	if err != nil {
 		return dmuser, err
 	}

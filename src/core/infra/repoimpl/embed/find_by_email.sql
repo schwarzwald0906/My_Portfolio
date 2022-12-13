@@ -3,4 +3,4 @@ SELECT
 FROM
 	user  
 WHERE
-	user.user_email = {{.Email}};
+	user.user_email = ?;
