@@ -18,7 +18,7 @@ func main() {
 		})
 	})
 
-	controller.SetupRoutes(router)
+	controller.UserSetupRoutes(router)
 
 	// Web サーバーを起動
 	router.Run()

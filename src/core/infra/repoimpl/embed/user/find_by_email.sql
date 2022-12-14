@@ -3,4 +3,4 @@ SELECT
 FROM
 	user  
 WHERE
-	user.user_id= ?;
+	user.user_email = ?;

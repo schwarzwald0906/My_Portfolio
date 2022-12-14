@@ -11,7 +11,7 @@ type Password string
 
 // パスワードは、英数字記号8文字以上30文字以下とする。
 //
-//	※余裕があれば、必ず大文字小文字数字を使わなければならないとする。
+//	必ず大文字小文字数字を使わなければならないとする。
 func NewPassword(pass string) (Password, error) {
 	if pass == "" {
 		return "", xerrors.New("パスワードを入力してください")

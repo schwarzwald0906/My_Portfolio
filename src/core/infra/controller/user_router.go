@@ -1,17 +1,17 @@
 package controller
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/app/userapp"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
+	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
 
 // ルーティングを別の関数やメソッドに分割
-func SetupRoutes(router *gin.Engine) {
+func UserSetupRoutes(router *gin.Engine) {
 	router.GET("/users", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "user list"})
 	})
@@ -25,7 +25,10 @@ func SetupRoutes(router *gin.Engine) {
 		// 異常系
 		c.String(http.StatusServiceUnavailable, "unavailable")
 
-		var userRepo userdm.UserRepository = repoimpl.NewUserRepository(&sql.DB{})
+		//データベース接続
+		repo := mydatabase.DbInit()
+		var userRepo userdm.UserRepository = repoimpl.NewUserRepository(repo)
+
 		// コンストラクタ作成
 		createUserApp := userapp.NewCreateUserApp(userRepo)
 
@@ -36,13 +39,15 @@ func SetupRoutes(router *gin.Engine) {
 		req.Password = c.PostForm("password")
 
 		err := createUserApp.Exec(c, req)
-
 		if err != nil {
 			c.AbortWithStatus(500)
 			return
 		}
 		// レスポンスを返す
 		c.JSON(201, nil)
+
+		//データベースの接続を切る
+		defer repo.Close()
 	})
 }
 
@@ -50,14 +55,3 @@ func SetupRoutes(router *gin.Engine) {
 func isHealthy() bool {
 	return true
 }
-
-// ユーザー用のコントローラーを作成する
-// ctrl := UserController{}
-
-// v1 := engine.Group("/v1")
-// {
-// 	// コントローラを通して、出力したい場合。
-// 	v1.GET("/login", ctrl.login)
-// 	v1.GET("/signup", ctrl.signup)
-// 	v1.POST("/signup", ctrl.signup)
-// }
