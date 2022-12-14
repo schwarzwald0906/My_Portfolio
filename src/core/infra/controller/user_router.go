@@ -50,8 +50,3 @@ func UserSetupRoutes(router *gin.Engine) {
 		defer repo.Close()
 	})
 }
-
-// ヘルスチェック処理
-func isHealthy() bool {
-	return true
-}

@@ -24,8 +24,3 @@ func main() {
 	router.Run()
 
 }
-
-// ヘルスチェック処理
-func isHealthy() bool {
-	return true
-}
