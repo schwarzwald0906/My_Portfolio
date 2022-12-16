@@ -8,10 +8,14 @@ import (
 )
 
 type Password string
+type CharacterType struct {
+	alphabet string
+	number   string
+	symbol   string
+}
 
 // パスワードは、英数字記号8文字以上30文字以下とする。
-//
-//	必ず大文字小文字数字を使わなければならないとする。
+// 必ず英字数字記号を1字以上使わなければならないとする。
 func NewPassword(pass string) (Password, error) {
 	if pass == "" {
 		return "", xerrors.New("パスワードを入力してください")
@@ -25,10 +29,12 @@ func NewPassword(pass string) (Password, error) {
 		return "", xerrors.New("英数字記号8文字以上30文字以下で入力してください")
 	}
 
+	// インスタンスを作成
+	c := CharacterType{`[A-Za-z]`, `\d`, `[!-/:-@{-~]`}
 	reg := []*regexp.Regexp{
-		regexp.MustCompile(`[A-Za-z]`),    // 英字が含まれるか判定
-		regexp.MustCompile(`\d`),          // 数字が含まれるか判定
-		regexp.MustCompile(`[!-/:-@{-~]`), // 記号が含まれるか判定
+		regexp.MustCompile(c.alphabet), // 英字が含まれるか判定
+		regexp.MustCompile(c.number),   // 数字が含まれるか判定
+		regexp.MustCompile(c.symbol),   // 記号が含まれるか判定
 	}
 	for _, r := range reg {
 		if r.FindString(pass) == "" {

@@ -13,7 +13,7 @@ func NewID() ID {
 
 func NewIDByStr(id string) (ID, error) {
 	if id == "" {
-		return "", xerrors.New("id  must be not empty")
+		return "", xerrors.New("id must be not empty")
 	}
 	return ID(id), nil
 }

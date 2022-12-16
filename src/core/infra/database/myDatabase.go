@@ -16,7 +16,6 @@ func DbInit() *sqlx.DB {
 	CONNECT := USER + ":" + PASS + "@/" + DBNAME + "?parseTime=true"
 
 	conn, err := sqlx.Open(DBMS, CONNECT)
-
 	if err != nil {
 		panic(err)
 	}

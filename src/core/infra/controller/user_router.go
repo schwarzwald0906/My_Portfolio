@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/app/userapp"
-	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
@@ -27,19 +26,19 @@ func UserSetupRoutes(router *gin.Engine) {
 
 		//データベース接続
 		repo := mydatabase.DbInit()
-		var userRepo userdm.UserRepository = repoimpl.NewUserRepository(repo)
+		userRepo := repoimpl.NewUserRepository(repo)
 
 		// コンストラクタ作成
 		createUserApp := userapp.NewCreateUserApp(userRepo)
 
-		var req *userapp.CreateUserRequest
 		// フォームからデータを取得
 		// 一旦ハードコーディング
-		req.Email = c.PostForm("email")
-		req.Password = c.PostForm("password")
+		req := &userapp.CreateUserRequest{
+			Email:    c.PostForm("email"),
+			Password: c.PostForm("password"),
+		}
 
-		err := createUserApp.Exec(c, req)
-		if err != nil {
+		if err := createUserApp.Exec(c, req); err != nil {
 			c.AbortWithStatus(500)
 			return
 		}
