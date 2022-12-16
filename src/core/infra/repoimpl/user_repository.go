@@ -3,7 +3,6 @@ package repoimpl
 import (
 	"context"
 	"embed"
-	"log"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
@@ -27,8 +26,8 @@ func NewUserRepository(db *sqlx.DB) userdm.UserRepository {
 // Create implements userdm.UserRepository
 func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	//go:embed embed/user/create_user.sql
-	var usersql embed.FS
-	tmpl, err := usersql.ReadFile("create_user.sql")
+	var userSQL embed.FS
+	tmpl, err := userSQL.ReadFile("create_user.sql")
 	if err != nil {
 		return err
 	}
@@ -36,7 +35,8 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 
 	// パラメータを渡してクエリを実行
 	if _, err = repo.db.Exec(p, user.ID(), user.Email(), user.Password(), user.CreatedAt(), user.UpdatedAt()); err != nil {
-		log.Fatalln(err)
+		// log.Fatalln(err)
+		return err
 	}
 	return nil
 
@@ -45,50 +45,41 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 // FindByEmailID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*userdm.User, error) {
 	//go:embed embed/user/find_by_email.sql
-	var usersql embed.FS
-	tmpl, err := usersql.ReadFile("find_by_email.sql")
+	var userSQL embed.FS
+	tmpl, err := userSQL.ReadFile("find_by_email.sql")
 	if err != nil {
 		return nil, err
 	}
 
 	// パラメータを渡してクエリを実行
-	var scanuser datamodel.User
+	var scanUser datamodel.User
 	p := string(tmpl)
-	err = repo.db.QueryRow(p, email).Scan(&scanuser)
+	err = repo.db.QueryRow(p, email).Scan(&scanUser)
 	if err != nil {
 		return nil, err
 	}
 
-	// scanuserからdmuserへ型変換
-	dmuser, err := userdm.Reconstruct(scanuser.ID, scanuser.Email, scanuser.Password, scanuser.CreatedAt, scanuser.UpdatedAt)
-	if err != nil {
-		return dmuser, err
-	}
-	defer repo.db.Close()
-	return dmuser, nil
+	// scanUserからdmuserへ型変換
+	return userdm.Reconstruct(scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }
 
 // FindByUserID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID) (*userdm.User, error) {
 	//go:embed embed/user/find_by_user_id.sql
-	var usersql embed.FS
-	tmpl, err := usersql.ReadFile("find_by_user_id.sql")
+	var userSQL embed.FS
+	tmpl, err := userSQL.ReadFile("find_by_user_id.sql")
 	if err != nil {
 		return nil, err
 	}
 
 	// パラメータを渡してクエリを実行
-	var scanuser datamodel.User
+	var scanUser datamodel.User
 	p := string(tmpl)
-	err = repo.db.QueryRow(p, userId).Scan(&scanuser)
+	err = repo.db.QueryRow(p, userId).Scan(&scanUser)
 	if err != nil {
 		return nil, err
 	}
 
-	// scanuserからdmuserへ型変換
-	dmuser, err := userdm.Reconstruct(scanuser.ID, scanuser.Email, scanuser.Password, scanuser.CreatedAt, scanuser.UpdatedAt)
-	if err != nil {
-		return dmuser, err
-	}
-	return dmuser, nil
+	// scanUserからdmuserへ型変換
+	return userdm.Reconstruct(scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }

@@ -19,7 +19,7 @@ const emailMaxLength = 50
 
 func NewEmail(email string) (Email, error) {
 	if len(email) == 0 {
-		return Email(""), xerrors.New("メールアドレスは必須入力です")
+		return Email(""), xerrors.New("メールアドレスは必須入力です。")
 	}
 
 	if len(email) > emailMaxLength {
