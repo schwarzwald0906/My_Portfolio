@@ -9,8 +9,7 @@ import (
 type Email string
 
 var (
-	emailFormat = `^[^@]+@[^@]+\.[^@]+$`
-	emailRegExp = regexp.MustCompile(emailFormat)
+	emailRegExp = regexp.MustCompile(`^[^@]+@[^@]+\.[^@]+$`)
 )
 
 // メールは、英数字記号50文字以下とする。

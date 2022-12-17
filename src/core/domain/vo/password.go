@@ -10,13 +10,7 @@ import (
 type Password string
 
 var (
-	alphabetFormat = `[A-Za-z]`
-	alphabetRegExp = regexp.MustCompile(alphabetFormat)
-	numberFormat   = `\d`
-	numberRegExp   = regexp.MustCompile(numberFormat)
-	symbolFormat   = `[!-/:-@{-~]`
-	symbolRegExp   = regexp.MustCompile(symbolFormat)
-	allRegExp      = []regexp.Regexp{*alphabetRegExp, *numberRegExp, *symbolRegExp}
+	passwordRegExp = []*regexp.Regexp{regexp.MustCompile(`[A-Za-z]`), regexp.MustCompile(`\d`), regexp.MustCompile(`[!-/:-@{-~]`)}
 )
 
 // パスワードは、英数字記号8文字以上30文字以下とする。
@@ -35,7 +29,7 @@ func NewPassword(pass string) (Password, error) {
 	}
 
 	// インスタンスを作成
-	for _, r := range allRegExp {
+	for _, r := range passwordRegExp {
 		if r.FindString(pass) == "" {
 			return "", xerrors.New("パスワードは、英数字記号をそれぞれ必ず1文字以上含むように入力してください。")
 		}
