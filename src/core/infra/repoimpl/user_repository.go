@@ -27,14 +27,12 @@ func NewUserRepository(db *sqlx.DB) userdm.UserRepository {
 func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	//go:embed embed/user/create_user.sql
 	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("create_user.sql")
+	tmpl, err := userSQL.ReadFile("embed/user/create_user.sql")
 	if err != nil {
 		return err
 	}
-	p := string(tmpl)
-
 	// パラメータを渡してクエリを実行
-	if _, err = repo.db.Exec(p, user.ID(), user.Email(), user.Password(), user.CreatedAt(), user.UpdatedAt()); err != nil {
+	if _, err = repo.db.Exec(string(tmpl), user.ID(), user.Email(), user.Password(), user.CreatedAt(), user.UpdatedAt()); err != nil {
 		// log.Fatalln(err)
 		return err
 	}
@@ -46,15 +44,14 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*userdm.User, error) {
 	//go:embed embed/user/find_by_email.sql
 	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("find_by_email.sql")
+	tmpl, err := userSQL.ReadFile("embed/user/find_by_email.sql")
 	if err != nil {
 		return nil, err
 	}
 
 	// パラメータを渡してクエリを実行
 	var scanUser datamodel.User
-	p := string(tmpl)
-	err = repo.db.QueryRow(p, email).Scan(&scanUser)
+	err = repo.db.QueryRow(string(tmpl), email).Scan(&scanUser)
 	if err != nil {
 		return nil, err
 	}
@@ -67,15 +64,14 @@ func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*u
 func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID) (*userdm.User, error) {
 	//go:embed embed/user/find_by_user_id.sql
 	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("find_by_user_id.sql")
+	tmpl, err := userSQL.ReadFile("embed/user/find_by_user_id.sql")
 	if err != nil {
 		return nil, err
 	}
 
 	// パラメータを渡してクエリを実行
 	var scanUser datamodel.User
-	p := string(tmpl)
-	err = repo.db.QueryRow(p, userId).Scan(&scanUser)
+	err = repo.db.QueryRow(string(tmpl), userId).Scan(&scanUser)
 	if err != nil {
 		return nil, err
 	}

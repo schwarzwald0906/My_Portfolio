@@ -24,43 +24,42 @@ func newUser(id UserID, email vo.Email, password vo.Password, createdAt vo.Creat
 	}, nil
 }
 
-func Reconstruct(id string, email string, password string, createdat time.Time, upadatedat time.Time) (*User, error) {
+func Reconstruct(id string, email string, password string, createdAt time.Time, upadatedAt time.Time) (*User, error) {
 	var user *User
 
-	newid, err := NewUserIDByStr(id)
+	newId, err := NewUserIDByStr(id)
 	if err != nil {
 		return user, err
 	}
-	newemail, err := vo.NewEmail(email)
+	newEmail, err := vo.NewEmail(email)
 	if err != nil {
 		return user, err
 	}
-	newpassword, err := vo.NewPassword(password)
+	newPassword, err := vo.NewPassword(password)
 	if err != nil {
 		return user, err
 	}
-	newcreatedat, err := vo.NewCreatedAtByVal(createdat)
+	newCreatedAt, err := vo.NewCreatedAtByVal(createdAt)
 	if err != nil {
 		return user, err
 	}
-	newupadatedat, err := vo.NewUpdatedAtByVal(upadatedat)
+	newUpadatedAt, err := vo.NewUpdatedAtByVal(upadatedAt)
 	if err != nil {
 		return user, err
 	}
 
 	return &User{
-		id:        newid,
-		email:     newemail,
-		password:  newpassword,
-		createdAt: newcreatedat,
-		updatedAt: newupadatedat,
+		id:        newId,
+		email:     newEmail,
+		password:  newPassword,
+		createdAt: newCreatedAt,
+		updatedAt: newUpadatedAt,
 	}, nil
 }
 
 func (u *User) ID() UserID {
 	return u.id
 }
-
 func (u *User) Email() vo.Email {
 	return u.email
 }
