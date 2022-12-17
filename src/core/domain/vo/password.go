@@ -9,6 +9,12 @@ import (
 
 type Password string
 
+const (
+	alphabet = `[A-Za-z]`
+	number   = `\d`
+	symbol   = `[!-/:-@{-~]`
+)
+
 // パスワードは、英数字記号8文字以上30文字以下とする。
 // 必ず英字数字記号を1字以上使わなければならないとする。
 func NewPassword(pass string) (Password, error) {
@@ -25,10 +31,10 @@ func NewPassword(pass string) (Password, error) {
 	}
 
 	// インスタンスを作成
-	reg := []*regexp.Regexp{
-		regexp.MustCompile(`[A-Za-z]`),
-		regexp.MustCompile(`\d`),
-		regexp.MustCompile(`[!-/:-@{-~]`),
+	reg := []regexp.Regexp{
+		*regexp.MustCompile(alphabet),
+		*regexp.MustCompile(number),
+		*regexp.MustCompile(symbol),
 	}
 	for _, r := range reg {
 		if r.FindString(pass) == "" {
