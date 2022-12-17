@@ -1,7 +1,7 @@
 package userdm
 
 import (
-	"github.com/ymdd1/mytweet/src/core/domain/vo"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
 func GenWhenCreate(email vo.Email, password vo.Password) (*User, error) {

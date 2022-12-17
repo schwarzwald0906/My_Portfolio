@@ -3,7 +3,7 @@ package userdm
 import (
 	"context"
 
-	"github.com/ymdd1/mytweet/src/core/domain/vo"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
 type IsDuplicatedByEmailDomainService struct {

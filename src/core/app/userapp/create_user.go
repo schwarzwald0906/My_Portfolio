@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/ymdd1/mytweet/src/core/domain/userdm"
-	"github.com/ymdd1/mytweet/src/core/domain/vo"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
 type CreateUserApp struct {
