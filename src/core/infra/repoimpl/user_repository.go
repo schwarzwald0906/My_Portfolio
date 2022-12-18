@@ -23,11 +23,12 @@ func NewUserRepository(db *sqlx.DB) userdm.UserRepository {
 	}
 }
 
+//go:embed embed/user/create_user.sql
+var createUserSQL embed.FS
+
 // Create implements userdm.UserRepository
 func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
-	//go:embed embed/user/create_user.sql
-	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("embed/user/create_user.sql")
+	tmpl, err := createUserSQL.ReadFile("create_user.sql")
 	if err != nil {
 		return err
 	}
@@ -40,11 +41,12 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 
 }
 
+//go:embed embed/user/find_by_email.sql
+var findByEmailSQL embed.FS
+
 // FindByEmailID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*userdm.User, error) {
-	//go:embed embed/user/find_by_email.sql
-	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("embed/user/find_by_email.sql")
+	tmpl, err := findByEmailSQL.ReadFile("embed/user/find_by_email.sql")
 	if err != nil {
 		return nil, err
 	}
@@ -60,11 +62,12 @@ func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*u
 	return userdm.Reconstruct(scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }
 
+//go:embed embed/user/find_by_user_id.sql
+var findByUserSQL embed.FS
+
 // FindByUserID implements userdm.UserRepository
 func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID) (*userdm.User, error) {
-	//go:embed embed/user/find_by_user_id.sql
-	var userSQL embed.FS
-	tmpl, err := userSQL.ReadFile("embed/user/find_by_user_id.sql")
+	tmpl, err := findByUserSQL.ReadFile("embed/user/find_by_user_id.sql")
 	if err != nil {
 		return nil, err
 	}
