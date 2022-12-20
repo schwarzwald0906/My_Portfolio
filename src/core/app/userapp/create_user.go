@@ -2,7 +2,6 @@ package userapp
 
 import (
 	"context"
-	"time"
 
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
@@ -19,10 +18,10 @@ func NewCreateUserApp(userRepo userdm.UserRepository) *CreateUserApp {
 }
 
 type CreateUserRequest struct {
-	Email     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Email    string
+	Password string
+	// CreatedAt time.Time
+	// UpdatedAt time.Time
 }
 
 // type CreateUserResponse struct {
