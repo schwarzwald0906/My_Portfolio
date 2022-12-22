@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,18 +13,20 @@ import (
 // ルーティングを別の関数やメソッドに分割
 func UserSetupRoutes(router *gin.Engine) {
 	router.GET("/users", func(c *gin.Context) {
+		fmt.Printf("get")
 		c.JSON(http.StatusOK, gin.H{"data": "user list"})
 	})
 
 	router.POST("/users", func(c *gin.Context) {
-		// 正常系
-		if isHealthy() {
-			c.String(http.StatusOK, "ok")
-			return
-		}
-		// 異常系
-		c.String(http.StatusServiceUnavailable, "unavailable")
+		// // 正常系
+		// if isHealthy() {
+		// 	c.String(http.StatusOK, "ok")
+		// 	return
+		// }
+		// // 異常系
+		// c.String(http.StatusServiceUnavailable, "unavailable")
 
+		fmt.Printf("post")
 		//データベース接続
 		repo := mydatabase.DbInit()
 		userRepo := repoimpl.NewUserRepository(repo)
