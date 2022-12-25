@@ -2,6 +2,7 @@ package userapp
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
@@ -29,10 +30,13 @@ type CreateUserRequest struct {
 // }
 
 func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) error {
+
 	email, err := vo.NewEmail(req.Email)
+	fmt.Printf("req.Emailの値は" + req.Email)
 	if err != nil {
 		return err
 	}
+
 	password, err := vo.NewPassword(req.Password)
 	if err != nil {
 		return err
@@ -43,7 +47,7 @@ func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) erro
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("H")
 	//上記で作成したuserをもとにINSERT処理を実行
 	return app.userRepository.Create(ctx, user)
 }
