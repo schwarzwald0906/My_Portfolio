@@ -19,8 +19,9 @@ func DbInit() *sqlx.DB {
 	DBMS := os.Getenv("DBMS")
 	USER := os.Getenv("USER")
 	PASS := os.Getenv("PASSWORD")
+	HOST := os.Getenv("HOST")
 	DBNAME := os.Getenv("DBNAME")
-	CONNECT := USER + ":" + PASS + "@/" + DBNAME + "?parseTime=true"
+	CONNECT := USER + ":" + PASS + "@tcp(" + HOST + ")/" + DBNAME + "?parseTime=true"
 
 	conn, err := sqlx.Open(DBMS, CONNECT)
 	if err != nil {

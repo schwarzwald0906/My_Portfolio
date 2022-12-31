@@ -29,7 +29,7 @@ func NewEmail(email string) (Email, error) {
 	}
 
 	if ok := emailRegExp.MatchString(email); !ok {
-		fmt.Printf("フォーマットが正しくありません。")
+		fmt.Printf("入力されたメールアドレスは%sです。フォーマットが正しくありません。", email)
 		return Email(""), xerrors.Errorf("フォーマットが正しくありません。")
 	}
 

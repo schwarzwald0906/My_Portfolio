@@ -3,7 +3,6 @@ package repoimpl
 import (
 	"context"
 	"embed"
-	"fmt"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
@@ -29,18 +28,11 @@ var createUserSQL embed.FS
 
 // Create implements userdm.UserRepository
 func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
-	fmt.Println("UserRepositoryのcreateまで到達")
 	tmpl, err := createUserSQL.ReadFile("embed/user/create_user.sql")
 	if err != nil {
-		fmt.Printf("ReadERR")
 		return err
 	}
 	// パラメータを渡してクエリを実行
-	fmt.Println(user.ID().String())
-	fmt.Println(user.Email().Value())
-	fmt.Println(user.Password().Value())
-	fmt.Println(user.CreatedAt().Value().Format("2006-01-02 15:04:05"))
-	fmt.Println(user.UpdatedAt().Value().Format("2006-01-02 15:04:05"))
 	if _, err = repo.db.Exec(
 		string(tmpl),
 		user.ID().String(),
@@ -48,15 +40,8 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 		user.Password().Value(),
 		user.CreatedAt().Value().Format("2006-01-02 15:04:05"),
 		user.UpdatedAt().Value().Format("2006-01-02 15:04:05")); err != nil {
-		// log.Fatalln(err)
-		fmt.Printf("ExecERR")
 		return err
 	}
-	// if _, err = repo.db.Exec(string(tmpl), user.ID(), user.Email(), user.Password(), user.CreatedAt(), user.UpdatedAt()); err != nil {
-	// 	// log.Fatalln(err)
-	// 	fmt.Printf("ExecERR")
-	// 	return err
-	// }
 	return nil
 
 }

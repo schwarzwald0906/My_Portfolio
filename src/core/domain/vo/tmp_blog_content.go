@@ -13,7 +13,8 @@ const tmpBlogContentMaxLength = 10000
 
 func NewTmpBlogContent(tmpBlogContent string) (TmpBlogContent, error) {
 	if utf8.RuneCountInString(tmpBlogContent) > tmpBlogContentMaxLength {
-		return TmpBlogContent(""), xerrors.Errorf("本文を、%d 文字以下で入力してください。現在%s文字入力されています。", tmpBlogContentMaxLength, tmpBlogContent)
+		return TmpBlogContent(""),
+			xerrors.Errorf("本文を、%d 文字以下で入力してください。現在%d文字入力されています。", tmpBlogContentMaxLength, utf8.RuneCountInString(tmpBlogContent))
 	}
 	return TmpBlogContent(tmpBlogContent), nil
 }
