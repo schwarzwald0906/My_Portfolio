@@ -23,14 +23,6 @@ func UserSetupRoutes(router *gin.Engine) {
 	})
 
 	router.POST("/users", func(c *gin.Context) {
-		// 正常系
-		if isHealthy() {
-			c.String(http.StatusOK, "ok")
-			return
-		}
-		// 異常系
-		c.String(http.StatusServiceUnavailable, "unavailable")
-
 		//データベース接続
 		repo := mydatabase.DbInit()
 		userRepo := repoimpl.NewUserRepository(repo)

@@ -20,13 +20,7 @@ func NewCreateUserApp(userRepo userdm.UserRepository) *CreateUserApp {
 type CreateUserRequest struct {
 	Email    string
 	Password string
-	// CreatedAt time.Time
-	// UpdatedAt time.Time
 }
-
-// type CreateUserResponse struct {
-// 	ID vo.UserId
-// }
 
 func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) error {
 
