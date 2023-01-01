@@ -8,13 +8,12 @@ import (
 
 type TmpBlogContent string
 
-// 本文は、10000文字以下とする。
 const tmpBlogContentMaxLength = 10000
 
 func NewTmpBlogContent(tmpBlogContent string) (TmpBlogContent, error) {
 	if utf8.RuneCountInString(tmpBlogContent) > tmpBlogContentMaxLength {
 		return TmpBlogContent(""),
-			xerrors.Errorf("本文を、%d 文字以下で入力してください。現在%d文字入力されています。", tmpBlogContentMaxLength, utf8.RuneCountInString(tmpBlogContent))
+			xerrors.Errorf("本文を、%d文字以下で入力してください。現在%d文字入力されています。", tmpBlogContentMaxLength, utf8.RuneCountInString(tmpBlogContent))
 	}
 	return TmpBlogContent(tmpBlogContent), nil
 }

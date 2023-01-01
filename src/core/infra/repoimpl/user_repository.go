@@ -35,7 +35,7 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	// パラメータを渡してクエリを実行
 	if _, err = repo.db.Exec(
 		string(tmpl),
-		user.ID().String(),
+		user.ID(),
 		user.Email().Value(),
 		user.Password().Value(),
 		user.CreatedAt().Value().Format("2006-01-02 15:04:05"),

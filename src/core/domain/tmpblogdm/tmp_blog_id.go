@@ -4,13 +4,13 @@ import (
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
-type UserID vo.ID
+type TmpBlogID vo.ID
 
-func NewUserID() vo.ID {
+func NewTmpBlogID() vo.ID {
 	return vo.NewID()
 }
 
-func NewUserIDByStr(idStr string) (UserID, error) {
+func NewTmpBlogIDByStr(idStr string) (TmpBlogID, error) {
 	id, err := vo.NewIDByStr(idStr)
-	return UserID(id), err
+	return TmpBlogID(id), err
 }

@@ -13,7 +13,6 @@ var (
 	emailRegExp = regexp.MustCompile(`^[^@]+@[^@]+\.[^@]+$`)
 )
 
-// メールは、英数字記号50文字以下とする。
 // RFCに準拠。
 const emailMaxLength = 50
 
@@ -25,7 +24,7 @@ func NewEmail(email string) (Email, error) {
 
 	if len(email) > emailMaxLength {
 		fmt.Printf("メールアドレスを、文字以下で入力してください。現在文字入力されています。")
-		return Email(""), xerrors.Errorf("メールアドレスを、%d 文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
+		return Email(""), xerrors.Errorf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
 	}
 
 	if ok := emailRegExp.MatchString(email); !ok {

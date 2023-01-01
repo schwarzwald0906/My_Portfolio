@@ -13,8 +13,6 @@ var (
 	passwordRegExp = []*regexp.Regexp{regexp.MustCompile(`[A-Za-z]`), regexp.MustCompile(`\d`), regexp.MustCompile(`[!-/:-@{-~]`)}
 )
 
-// パスワードは、英数字記号8文字以上30文字以下とする。
-// 必ず英字数字記号を1字以上使わなければならないとする。
 func NewPassword(pass string) (Password, error) {
 	if pass == "" {
 		return "", xerrors.New("パスワードを入力してください")

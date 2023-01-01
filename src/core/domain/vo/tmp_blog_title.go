@@ -6,13 +6,12 @@ import (
 
 type TmpBlogTitle string
 
-// タイトルは、30文字以下とする。
 const tmpBlogTitleMaxLength = 30
 
 func NewTmpBlogTitle(tmpBlogTitle string) (TmpBlogTitle, error) {
 	if len(tmpBlogTitle) > tmpBlogTitleMaxLength {
 		return TmpBlogTitle(""),
-			xerrors.Errorf("タイトルを、%d 文字以下で入力してください。現在%s文字入力されています。", tmpBlogTitleMaxLength, tmpBlogTitle)
+			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%s文字入力されています。", tmpBlogTitleMaxLength, tmpBlogTitle)
 	}
 	return TmpBlogTitle(tmpBlogTitle), nil
 }

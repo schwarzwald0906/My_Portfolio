@@ -72,7 +72,3 @@ func (u *User) CreatedAt() vo.CreatedAt {
 func (u *User) UpdatedAt() vo.UpdatedAt {
 	return u.updatedAt
 }
-
-func (u *User) Equals(u2 *User) bool {
-	return u.id.Equals(u2.id)
-}
