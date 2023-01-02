@@ -1,4 +1,4 @@
-package vo
+package tmpblogdm
 
 import (
 	"golang.org/x/xerrors"
