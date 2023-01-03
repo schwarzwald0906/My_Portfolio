@@ -1,4 +1,4 @@
-package main
+package middleware
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func middleware() gin.HandlerFunc {
+func UserMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Println("before logic")
 		c.Next()

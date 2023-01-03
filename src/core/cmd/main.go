@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/controller"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/middleware"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 
 	//管理者ログイン時のルーティング処理をグループ化
 	g := r.Group("/")
-	g.Use(middleware())
+	g.Use(middleware.UserMiddleware())
 	{
 		controller.UserSetupRoutes(g)
 	}
