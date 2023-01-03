@@ -2,7 +2,6 @@ package userapp
 
 import (
 	"context"
-	"time"
 
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
@@ -19,21 +18,17 @@ func NewCreateUserApp(userRepo userdm.UserRepository) *CreateUserApp {
 }
 
 type CreateUserRequest struct {
-	Email     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Email    string
+	Password string
 }
 
-// type CreateUserResponse struct {
-// 	ID vo.UserId
-// }
-
 func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) error {
+
 	email, err := vo.NewEmail(req.Email)
 	if err != nil {
 		return err
 	}
+
 	password, err := vo.NewPassword(req.Password)
 	if err != nil {
 		return err
@@ -44,7 +39,7 @@ func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) erro
 	if err != nil {
 		return err
 	}
-
 	//上記で作成したuserをもとにINSERT処理を実行
 	return app.userRepository.Create(ctx, user)
+
 }

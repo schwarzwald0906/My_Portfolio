@@ -12,18 +12,17 @@ import (
 // ルーティングを別の関数やメソッドに分割
 func UserSetupRoutes(router *gin.Engine) {
 	router.GET("/users", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "user list"})
-	})
-
-	router.POST("/users", func(c *gin.Context) {
 		// 正常系
 		if isHealthy() {
-			c.String(http.StatusOK, "ok")
+			c.JSON(http.StatusOK, gin.H{"data": "user list"})
 			return
 		}
 		// 異常系
 		c.String(http.StatusServiceUnavailable, "unavailable")
 
+	})
+
+	router.POST("/users", func(c *gin.Context) {
 		//データベース接続
 		repo := mydatabase.DbInit()
 		userRepo := repoimpl.NewUserRepository(repo)
@@ -32,11 +31,13 @@ func UserSetupRoutes(router *gin.Engine) {
 		createUserApp := userapp.NewCreateUserApp(userRepo)
 
 		// フォームからデータを取得
-		// 一旦ハードコーディング
 		req := &userapp.CreateUserRequest{
-			Email:    c.PostForm("email"),
+			Email:    c.PostForm("mail"),
 			Password: c.PostForm("password"),
 		}
+		// 一旦ハードコーディング
+		req.Email = "email@gmail.com"
+		req.Password = "password12345!"
 
 		if err := createUserApp.Exec(c, req); err != nil {
 			c.AbortWithStatus(500)

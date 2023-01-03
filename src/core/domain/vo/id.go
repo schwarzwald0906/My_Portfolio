@@ -17,3 +17,11 @@ func NewIDByStr(id string) (ID, error) {
 	}
 	return ID(id), nil
 }
+
+func (id ID) Equals(id2 ID) bool {
+	return string(id) == string(id2)
+}
+
+func (id ID) String() string {
+	return string(id)
+}

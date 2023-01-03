@@ -3,11 +3,13 @@ version: '3'
 services:
   mysql:
     image: mysql:8.0.29
+    ports:
+      - "3306:3306"
     platform: linux/x86_64
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mydb
-      MYSQL_USER: user
+      MYSQL_USER: kimsukhong
       MYSQL_PASSWORD: password
       LANG: C.UTF-8
       TZ: Asia/Tokyo
