@@ -9,18 +9,23 @@ import (
 
 func main() {
 	// Gin のルーターを作成
-	router := gin.Default()
+	r := gin.Default()
 
-	// ルーティング
-	router.GET("/", func(c *gin.Context) {
+	//デフォルトルーティング
+	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title": "Main website",
 		})
 	})
 
-	controller.UserSetupRoutes(router)
+	//管理者ログイン時のルーティング処理をグループ化
+	g := r.Group("/")
+	g.Use(middleware())
+	{
+		controller.UserSetupRoutes(g)
+	}
 
 	// Web サーバーを起動
-	router.Run()
+	r.Run()
 
 }

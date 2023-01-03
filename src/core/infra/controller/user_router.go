@@ -9,9 +9,9 @@ import (
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
 
-// ルーティングを別の関数やメソッドに分割
-func UserSetupRoutes(router *gin.Engine) {
-	router.GET("/users", func(c *gin.Context) {
+// ユーザードメインに関するルーティング処理
+func UserSetupRoutes(g *gin.RouterGroup) {
+	g.GET("/users", func(c *gin.Context) {
 		// 正常系
 		if isHealthy() {
 			c.JSON(http.StatusOK, gin.H{"data": "user list"})
@@ -22,8 +22,7 @@ func UserSetupRoutes(router *gin.Engine) {
 
 	})
 
-	router.POST("/users", func(c *gin.Context) {
-		//データベース接続
+	g.POST("/users", func(c *gin.Context) {
 		repo := mydatabase.DbInit()
 		userRepo := repoimpl.NewUserRepository(repo)
 
