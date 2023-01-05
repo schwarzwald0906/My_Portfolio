@@ -11,20 +11,20 @@ type BlogContent string
 const blogContentMaxLength = 10000
 
 func NewBlogContent(blogContent string) (BlogContent, error) {
-	if len(blogContent) == 0 {
+	if blogContent == "" {
 		return BlogContent(""), xerrors.New("本文は必須入力です。")
 	}
-	if utf8.RuneCountInString(blogContent) > blogContentMaxLength {
+	if length := utf8.RuneCountInString(blogContent); length > blogContentMaxLength {
 		return BlogContent(""),
-			xerrors.Errorf("本文を、%d文字以下で入力してください。現在%d文字入力されています。", blogContentMaxLength, utf8.RuneCountInString(blogContent))
+			xerrors.Errorf("本文を、%d文字以下で入力してください。現在%d文字入力されています。", blogContentMaxLength, length)
 	}
 	return BlogContent(blogContent), nil
 }
 
-func (e BlogContent) Value() string {
+func (e BlogContent) String() string {
 	return string(e)
 }
 
 func (e BlogContent) Equals(e2 BlogContent) bool {
-	return e.Value() == e2.Value()
+	return e.String() == e2.String()
 }

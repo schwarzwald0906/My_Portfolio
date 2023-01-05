@@ -1,13 +1,14 @@
 package tmpblogdm
 
 import (
+	"github.com/google/uuid"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
 type TmpBlogID vo.ID
 
-func NewTmpBlogID() vo.ID {
-	return vo.NewID()
+func NewTmpBlogID() TmpBlogID {
+	return TmpBlogID(uuid.New().String())
 }
 
 func NewTmpBlogIDByStr(idStr string) (TmpBlogID, error) {

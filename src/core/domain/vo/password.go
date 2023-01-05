@@ -40,6 +40,6 @@ func NewPassword(pass string) (Password, error) {
 	return Password(string(hashPass)), nil
 }
 
-func (p Password) Value() string {
+func (p Password) String() string {
 	return string(p)
 }

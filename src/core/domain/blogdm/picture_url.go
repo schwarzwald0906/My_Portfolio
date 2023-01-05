@@ -8,7 +8,7 @@ import (
 type PictureURL vo.URL
 
 func NewPictureURL(urlStr string) (PictureURL, error) {
-	if len(urlStr) == 0 {
+	if urlStr == "" {
 		return PictureURL(""), xerrors.New("画像がアップロードされていません。")
 	}
 	url, err := vo.NewURL(urlStr)

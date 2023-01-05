@@ -16,7 +16,7 @@ var (
 const emailMaxLength = 50
 
 func NewEmail(email string) (Email, error) {
-	if len(email) == 0 {
+	if email == "" {
 		return Email(""), xerrors.New("メールアドレスは必須入力です。")
 	}
 
@@ -31,10 +31,10 @@ func NewEmail(email string) (Email, error) {
 	return Email(email), nil
 }
 
-func (e Email) Value() string {
+func (e Email) String() string {
 	return string(e)
 }
 
 func (e Email) Equals(e2 Email) bool {
-	return e.Value() == e2.Value()
+	return e.String() == e2.String()
 }
