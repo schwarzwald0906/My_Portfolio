@@ -21,7 +21,7 @@ func main() {
 
 	//管理者ログイン時のルーティング処理をグループ化
 	g := r.Group("/")
-	g.Use(middleware.UserMiddleware())
+	g.Use(middleware.ErrHandling())
 	{
 		controller.UserSetupRoutes(g)
 	}
