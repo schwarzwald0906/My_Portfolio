@@ -11,9 +11,9 @@ type TmpBlogTitle string
 const tmpBlogTitleMaxLength = 30
 
 func NewTmpBlogTitle(tmpBlogTitle string) (TmpBlogTitle, error) {
-	if utf8.RuneCountInString(tmpBlogTitle) > tmpBlogTitleMaxLength {
+	if length := utf8.RuneCountInString(tmpBlogTitle); length > tmpBlogTitleMaxLength {
 		return TmpBlogTitle(""),
-			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%s文字入力されています。", tmpBlogTitleMaxLength, tmpBlogTitle)
+			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%d文字入力されています。", tmpBlogTitleMaxLength, length)
 	}
 	return TmpBlogTitle(tmpBlogTitle), nil
 }

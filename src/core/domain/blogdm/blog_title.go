@@ -14,9 +14,9 @@ func NewBlogTitle(blogTitle string) (BlogTitle, error) {
 	if blogTitle == "" {
 		return BlogTitle(""), xerrors.New("タイトルは必須入力です。")
 	}
-	if utf8.RuneCountInString(blogTitle) > blogTitleMaxLength {
+	if length := utf8.RuneCountInString(blogTitle); length > blogTitleMaxLength {
 		return BlogTitle(""),
-			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%s文字入力されています。", blogTitleMaxLength, blogTitle)
+			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%d文字入力されています。", blogTitleMaxLength, length)
 	}
 	return BlogTitle(blogTitle), nil
 }
