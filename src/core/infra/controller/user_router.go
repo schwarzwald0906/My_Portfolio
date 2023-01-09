@@ -35,11 +35,14 @@ func UserSetupRoutes(g *gin.RouterGroup) {
 			Password: c.PostForm("password"),
 		}
 		// 一旦ハードコーディング
-		req.Email = "email@gmail.com"
+		// req.Email = "email@gmail.com"
+		req.Email = ""
 		req.Password = "password12345!"
 
 		if err := createUserApp.Exec(c, req); err != nil {
-			c.AbortWithStatus(500)
+			// c.AbortWithStatus(500)
+			var ERR_KEY string
+			c.Set(ERR_KEY, err)
 			return
 		}
 		// レスポンスを返す
