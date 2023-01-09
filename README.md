@@ -1,4 +1,4 @@
-# Clean Archtecture,DDDによるブログ機能付きWEBサイト
+# Clean Architecture,DDDによるブログ機能付きWEBサイト
 
 現在以下の構成で作成を進めています。
 
