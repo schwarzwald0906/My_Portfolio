@@ -3,6 +3,7 @@ package vo
 import (
 	"regexp"
 
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 	"golang.org/x/xerrors"
 )
 
@@ -16,9 +17,13 @@ var (
 const emailMaxLength = 50
 
 func NewEmail(email string) (Email, error) {
+
 	if email == "" {
-		return Email(""), xerrors.New("メールアドレスは必須入力です。")
+		return Email(""), myerror.BadRequestWrapf("メールアドレスは必須入力です。")
 	}
+	// if email == "" {
+	// 	return Email(""), xerrors.New("メールアドレスは必須入力です。")
+	// }
 
 	if len(email) > emailMaxLength {
 		return Email(""), xerrors.Errorf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -15,14 +14,9 @@ func ErrHandling() gin.HandlerFunc {
 		c.Next()
 		var ERR_KEY string
 		errVal, ok := c.Get(ERR_KEY)
-		fmt.Println(errVal)
-
-		val := myerror.NotFoundWrapf("error")
-		fmt.Println("valの値は")
-		fmt.Println(val)
 		if ok {
 			// エラーハンドリングをする
-			switch val.(type) {
+			switch errVal.(type) {
 			case *myerror.BadRequestErr:
 				c.AbortWithStatus(400)
 			case *myerror.NotFoundErr:
