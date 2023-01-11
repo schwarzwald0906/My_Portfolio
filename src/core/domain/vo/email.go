@@ -4,7 +4,6 @@ import (
 	"regexp"
 
 	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
-	"golang.org/x/xerrors"
 )
 
 type Email string
@@ -21,16 +20,13 @@ func NewEmail(email string) (Email, error) {
 	if email == "" {
 		return Email(""), myerror.BadRequestWrapf("メールアドレスは必須入力です。")
 	}
-	// if email == "" {
-	// 	return Email(""), xerrors.New("メールアドレスは必須入力です。")
-	// }
 
 	if len(email) > emailMaxLength {
-		return Email(""), xerrors.Errorf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
+		return Email(""), myerror.BadRequestWrapf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
 	}
 
 	if ok := emailRegExp.MatchString(email); !ok {
-		return Email(""), xerrors.Errorf("フォーマットが正しくありません。")
+		return Email(""), myerror.BadRequestWrapf("フォーマットが正しくありません。")
 	}
 
 	return Email(email), nil

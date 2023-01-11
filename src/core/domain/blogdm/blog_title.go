@@ -3,7 +3,7 @@ package tmpblogdm
 import (
 	"unicode/utf8"
 
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type BlogTitle string
@@ -12,11 +12,11 @@ const blogTitleMaxLength = 30
 
 func NewBlogTitle(blogTitle string) (BlogTitle, error) {
 	if blogTitle == "" {
-		return BlogTitle(""), xerrors.New("タイトルは必須入力です。")
+		return BlogTitle(""), myerror.BadRequestWrapf("タイトルは必須入力です。")
 	}
 	if length := utf8.RuneCountInString(blogTitle); length > blogTitleMaxLength {
 		return BlogTitle(""),
-			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%d文字入力されています。", blogTitleMaxLength, length)
+			myerror.BadRequestWrapf("タイトルを、%d文字以下で入力してください。現在%d文字入力されています。", blogTitleMaxLength, length)
 	}
 	return BlogTitle(blogTitle), nil
 }

@@ -36,7 +36,7 @@ func UserSetupRoutes(g *gin.RouterGroup) {
 		}
 		// 一旦ハードコーディング
 		// req.Email = "email@gmail.com"
-		req.Email = ""
+		req.Email = "emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@gmail.com"
 		req.Password = "password12345!"
 
 		if err := createUserApp.Exec(c, req); err != nil {

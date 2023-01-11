@@ -2,14 +2,14 @@ package tmpblogdm
 
 import (
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type PictureURL vo.URL
 
 func NewPictureURL(urlStr string) (PictureURL, error) {
 	if urlStr == "" {
-		return PictureURL(""), xerrors.New("画像がアップロードされていません。")
+		return PictureURL(""), myerror.BadRequestWrapf("画像がアップロードされていません。")
 	}
 	url, err := vo.NewURL(urlStr)
 	return PictureURL(url), err

@@ -2,7 +2,7 @@ package vo
 
 import (
 	"github.com/google/uuid"
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type ID string
@@ -13,7 +13,7 @@ func NewID() ID {
 
 func NewIDByStr(id string) (ID, error) {
 	if id == "" {
-		return "", xerrors.New("id must be not empty")
+		return "", myerror.BadRequestWrapf("id must be not empty")
 	}
 	return ID(id), nil
 }

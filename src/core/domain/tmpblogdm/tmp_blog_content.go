@@ -3,7 +3,7 @@ package tmpblogdm
 import (
 	"unicode/utf8"
 
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type TmpBlogContent string
@@ -13,7 +13,7 @@ const tmpBlogContentMaxLength = 10000
 func NewTmpBlogContent(tmpBlogContent string) (TmpBlogContent, error) {
 	if length := utf8.RuneCountInString(tmpBlogContent); length > tmpBlogContentMaxLength {
 		return TmpBlogContent(""),
-			xerrors.Errorf("本文を、%d文字以下で入力してください。現在%d文字入力されています。", tmpBlogContentMaxLength, length)
+			myerror.BadRequestWrapf("本文を、%d文字以下で入力してください。現在%d文字入力されています。", tmpBlogContentMaxLength, length)
 	}
 	return TmpBlogContent(tmpBlogContent), nil
 }
