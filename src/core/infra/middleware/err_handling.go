@@ -5,7 +5,8 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/schwarzwald0906/My_Portfolio/src/core/error"
+
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 func ErrHandling() gin.HandlerFunc {
@@ -16,17 +17,17 @@ func ErrHandling() gin.HandlerFunc {
 		errVal, ok := c.Get(ERR_KEY)
 		fmt.Println(errVal)
 
-		val := error.BadRequestWrapf("error")
+		val := myerror.NotFoundWrapf("error")
 		fmt.Println("valの値は")
 		fmt.Println(val)
 		if ok {
 			// エラーハンドリングをする
 			switch val.(type) {
-			case error.BadRequestErr:
+			case *myerror.BadRequestErr:
 				c.AbortWithStatus(400)
-			case error.NotFoundErr:
+			case *myerror.NotFoundErr:
 				c.AbortWithStatus(404)
-			case error.InternalServerErr:
+			case *myerror.InternalServerErr:
 				c.AbortWithStatus(500)
 			}
 		}
