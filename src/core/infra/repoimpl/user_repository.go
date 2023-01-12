@@ -36,10 +36,10 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 	if _, err = repo.db.Exec(
 		string(tmpl),
 		user.ID(),
-		user.Email().Value(),
-		user.Password().Value(),
-		user.CreatedAt().Value().Format("2006-01-02 15:04:05"),
-		user.UpdatedAt().Value().Format("2006-01-02 15:04:05")); err != nil {
+		user.Email().String(),
+		user.Password().String(),
+		user.CreatedAt().Time().Format("2006-01-02 15:04:05"),
+		user.UpdatedAt().Time().Format("2006-01-02 15:04:05")); err != nil {
 		return err
 	}
 	return nil

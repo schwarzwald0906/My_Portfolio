@@ -10,6 +10,6 @@ func NewCreatedAt() (CreatedAt, error) {
 func NewCreatedAtByVal(val time.Time) (CreatedAt, error) {
 	return CreatedAt(val), nil
 }
-func (e CreatedAt) Value() time.Time {
+func (e CreatedAt) Time() time.Time {
 	return time.Time(e)
 }

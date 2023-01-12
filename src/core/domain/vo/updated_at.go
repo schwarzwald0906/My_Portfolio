@@ -10,6 +10,6 @@ func NewUpdatedAt() (UpdatedAt, error) {
 func NewUpdatedAtByVal(val time.Time) (UpdatedAt, error) {
 	return UpdatedAt(val), nil
 }
-func (e UpdatedAt) Value() time.Time {
+func (e UpdatedAt) Time() time.Time {
 	return time.Time(e)
 }

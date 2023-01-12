@@ -6,8 +6,8 @@ import (
 
 type TmpBlogID vo.ID
 
-func NewTmpBlogID() vo.ID {
-	return vo.NewID()
+func NewTmpBlogID() TmpBlogID {
+	return TmpBlogID(vo.NewID())
 }
 
 func NewTmpBlogIDByStr(idStr string) (TmpBlogID, error) {

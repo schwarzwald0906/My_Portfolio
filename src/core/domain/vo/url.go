@@ -3,7 +3,7 @@ package vo
 import (
 	"regexp"
 
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 var (
@@ -14,7 +14,7 @@ type URL string
 
 func NewURL(url string) (URL, error) {
 	if ok := urlRegExp.MatchString(url); !ok {
-		return "", xerrors.Errorf("入力されたURLは%sです。フォーマットが正しくありません。", url)
+		return "", myerror.BadRequestWrapf("入力されたURLは%sです。フォーマットが正しくありません。", url)
 	}
 	return URL(url), nil
 }
