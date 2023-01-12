@@ -26,6 +26,18 @@ type InternalServerErr struct {
 	*appErr
 }
 
+func (e *appErr) Msg() string {
+	return e.msg
+}
+
+func (e *appErr) Trace() error {
+	return e.trace
+}
+
+func (e *appErr) StatusCd() int {
+	return e.statusCd
+}
+
 func BadRequestWrapf(format string, args ...any) error {
 	err := &appErr{
 		statusCd: http.StatusBadRequest,

@@ -1,8 +1,7 @@
 package userdm
 
 import (
-	"context"
-
+	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
@@ -14,8 +13,8 @@ func NewIsDuplicatedByEmailDomainService(userRepo UserRepository) *IsDuplicatedB
 	return &IsDuplicatedByEmailDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByEmailDomainService) Exec(ctx context.Context, email vo.Email) (bool, error) {
-	user, err := ds.userRepository.FindByEmailID(ctx, email)
+func (ds *IsDuplicatedByEmailDomainService) Exec(c *gin.Context, email vo.Email) (bool, error) {
+	user, err := ds.userRepository.FindByEmailID(c, email)
 	if err != nil {
 		return false, err
 	}

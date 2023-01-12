@@ -1,9 +1,9 @@
 package repoimpl
 
 import (
-	"context"
 	"embed"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
@@ -27,7 +27,7 @@ func NewUserRepository(db *sqlx.DB) userdm.UserRepository {
 var createUserSQL embed.FS
 
 // Create implements userdm.UserRepository
-func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
+func (repo *UserRepoImpl) Create(c *gin.Context, user *userdm.User) error {
 	tmpl, err := createUserSQL.ReadFile("embed/user/create_user.sql")
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func (repo *UserRepoImpl) Create(ctx context.Context, user *userdm.User) error {
 var findByEmailSQL embed.FS
 
 // FindByEmailID implements userdm.UserRepository
-func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*userdm.User, error) {
+func (repo *UserRepoImpl) FindByEmailID(c *gin.Context, email vo.Email) (*userdm.User, error) {
 	tmpl, err := findByEmailSQL.ReadFile("embed/user/find_by_email.sql")
 	if err != nil {
 		return nil, err
@@ -64,14 +64,14 @@ func (repo *UserRepoImpl) FindByEmailID(ctx context.Context, email vo.Email) (*u
 	}
 
 	// scanUserからdmuserへ型変換
-	return userdm.Reconstruct(scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
+	return userdm.Reconstruct(c, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }
 
 //go:embed embed/user/find_by_user_id.sql
 var findByUserSQL embed.FS
 
 // FindByUserID implements userdm.UserRepository
-func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID) (*userdm.User, error) {
+func (repo *UserRepoImpl) FindByUserID(c *gin.Context, userId userdm.UserID) (*userdm.User, error) {
 	tmpl, err := findByUserSQL.ReadFile("embed/user/find_by_user_id.sql")
 	if err != nil {
 		return nil, err
@@ -85,5 +85,5 @@ func (repo *UserRepoImpl) FindByUserID(ctx context.Context, userId userdm.UserID
 	}
 
 	// scanUserからdmuserへ型変換
-	return userdm.Reconstruct(scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
+	return userdm.Reconstruct(c, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }

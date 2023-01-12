@@ -3,6 +3,7 @@ package userdm
 import (
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
@@ -24,21 +25,15 @@ func newUser(id UserID, email vo.Email, password vo.Password, createdAt vo.Creat
 	}, nil
 }
 
-func Reconstruct(id string, email string, password string, createdAt time.Time, upadatedAt time.Time) (*User, error) {
+func Reconstruct(c *gin.Context, id string, email string, password string, createdAt time.Time, upadatedAt time.Time) (*User, error) {
 	var user *User
 
-	newId, err := NewUserIDByStr(id)
-	if err != nil {
-		return user, err
-	}
-	newEmail, err := vo.NewEmail(email)
-	if err != nil {
-		return user, err
-	}
-	newPassword, err := vo.NewPassword(password)
-	if err != nil {
-		return user, err
-	}
+	newId := NewUserIDByStr(c, id)
+
+	newEmail := vo.NewEmail(c, email)
+
+	newPassword := vo.NewPassword(c, password)
+
 	newCreatedAt, err := vo.NewCreatedAtByVal(createdAt)
 	if err != nil {
 		return user, err
