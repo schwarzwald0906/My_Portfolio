@@ -1,6 +1,6 @@
 package userdm
 
-import "github.com/gin-gonic/gin"
+import "context"
 
 type IsDuplicatedByUserIDDomainService struct {
 	userRepository UserRepository
@@ -10,7 +10,7 @@ func NewIsDuplicatedByUserIDDomainService(userRepo UserRepository) *IsDuplicated
 	return &IsDuplicatedByUserIDDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByUserIDDomainService) Exec(c *gin.Context, userID UserID) (bool, error) {
+func (ds *IsDuplicatedByUserIDDomainService) Exec(c context.Context, userID UserID) (bool, error) {
 	user, err := ds.userRepository.FindByUserID(c, userID)
 	if err != nil {
 		return false, err

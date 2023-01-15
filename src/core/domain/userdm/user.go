@@ -28,11 +28,11 @@ func newUser(id UserID, email vo.Email, password vo.Password, createdAt vo.Creat
 func Reconstruct(c *gin.Context, id string, email string, password string, createdAt time.Time, upadatedAt time.Time) (*User, error) {
 	var user *User
 
-	newId := NewUserIDByStr(c, id)
+	newId, err := NewUserIDByStr(c, id)
 
-	newEmail := vo.NewEmail(c, email)
+	newEmail, err := vo.NewEmail(c, email)
 
-	newPassword := vo.NewPassword(c, password)
+	newPassword, err := vo.NewPassword(c, password)
 
 	newCreatedAt, err := vo.NewCreatedAtByVal(createdAt)
 	if err != nil {

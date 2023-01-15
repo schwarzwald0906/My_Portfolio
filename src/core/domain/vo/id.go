@@ -1,7 +1,8 @@
 package vo
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+
 	"github.com/google/uuid"
 	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
@@ -12,13 +13,11 @@ func NewID() ID {
 	return ID(uuid.New().String())
 }
 
-func NewIDByStr(c *gin.Context, id string) ID {
-	var ERR_KEY string
+func NewIDByStr(c context.Context, id string) (ID, error) {
 	if id == "" {
-		c.Set(ERR_KEY, myerror.BadRequestWrapf("IDは必須入力です。"))
-		return ""
+		return "", myerror.BadRequestWrapf("IDは必須入力です。")
 	}
-	return ID(id)
+	return ID(id), nil
 }
 
 func (id ID) Equals(id2 ID) bool {

@@ -1,7 +1,8 @@
 package userapp
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/userdm"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
@@ -21,12 +22,16 @@ type CreateUserRequest struct {
 	Password string
 }
 
-func (app *CreateUserApp) Exec(c *gin.Context, req *CreateUserRequest) error {
+func (app *CreateUserApp) Exec(c context.Context, req *CreateUserRequest) error {
 
-	email := vo.NewEmail(c, req.Email)
-
-	password := vo.NewPassword(c, req.Password)
-
+	email, err := vo.NewEmail(c, req.Email)
+	if err != nil {
+		return err
+	}
+	password, err := vo.NewPassword(c, req.Password)
+	if err != nil {
+		return err
+	}
 	//入力値からドメインモデルを取得
 	user, err := userdm.GenWhenCreate(email, password)
 	if err != nil {

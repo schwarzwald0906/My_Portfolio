@@ -38,7 +38,7 @@ func (e *appErr) StatusCd() int {
 	return e.statusCd
 }
 
-func BadRequestWrapf(format string, args ...any) error {
+func BadRequestWrapf(format string, args ...any) *BadRequestErr {
 	err := &appErr{
 		statusCd: http.StatusBadRequest,
 	}
@@ -54,7 +54,7 @@ func BadRequestWrapf(format string, args ...any) error {
 	return &BadRequestErr{err}
 }
 
-func NotFoundWrapf(format string, args ...any) error {
+func NotFoundWrapf(format string, args ...any) *NotFoundErr {
 	err := &appErr{
 		statusCd: http.StatusNotFound,
 	}
@@ -70,7 +70,7 @@ func NotFoundWrapf(format string, args ...any) error {
 	return &NotFoundErr{err}
 }
 
-func InternalServerWrapf(format string, args ...any) error {
+func InternalServerWrapf(format string, args ...any) *InternalServerErr {
 	err := &appErr{
 		statusCd: http.StatusInternalServerError,
 	}

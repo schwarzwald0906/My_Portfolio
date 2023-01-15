@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/app/userapp"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/config"
 	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
@@ -41,8 +42,7 @@ func UserSetupRoutes(g *gin.RouterGroup) {
 
 		if err := createUserApp.Exec(c, req); err != nil {
 			// c.AbortWithStatus(500)
-			var ERR_KEY string
-			c.Set(ERR_KEY, err)
+			c.Set(config.ERR_KEY, err)
 			return
 		}
 		// レスポンスを返す

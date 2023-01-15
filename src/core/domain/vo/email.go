@@ -1,9 +1,9 @@
 package vo
 
 import (
+	"context"
 	"regexp"
 
-	"github.com/gin-gonic/gin"
 	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
@@ -16,24 +16,20 @@ var (
 // RFCに準拠。
 const emailMaxLength = 50
 
-func NewEmail(c *gin.Context, email string) Email {
-	var ERR_KEY string
+func NewEmail(c context.Context, email string) (Email, error) {
 	if email == "" {
-		c.Set(ERR_KEY, myerror.BadRequestWrapf("メールアドレスは必須入力です。"))
-		return Email("")
+		return Email(""), myerror.BadRequestWrapf("メールアドレスは必須入力です。")
 	}
 
 	if len(email) > emailMaxLength {
-		c.Set(ERR_KEY, myerror.BadRequestWrapf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email))
-		return Email("")
+		return Email(""), myerror.BadRequestWrapf("メールアドレスを、%d文字以下で入力してください。現在%s文字入力されています。", emailMaxLength, email)
 	}
 
 	if ok := emailRegExp.MatchString(email); !ok {
-		c.Set(ERR_KEY, myerror.BadRequestWrapf(" 入力値は、%sです。フォーマットが正しくありません。", email))
-		return Email("")
+		return Email(""), myerror.BadRequestWrapf(" 入力値は、%sです。フォーマットが正しくありません。", email)
 	}
 
-	return Email(email)
+	return Email(email), nil
 }
 
 func (e Email) String() string {

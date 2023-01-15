@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/schwarzwald0906/My_Portfolio/src/core/config"
 	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
@@ -12,8 +13,7 @@ func ErrHandling() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Println("before logic")
 		c.Next()
-		var ERR_KEY string
-		errVal, ok := c.Get(ERR_KEY)
+		errVal, ok := c.Get(config.ERR_KEY)
 		if ok {
 			// エラーハンドリングをする
 			switch errVal.(type) {

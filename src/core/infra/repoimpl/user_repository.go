@@ -1,6 +1,7 @@
 package repoimpl
 
 import (
+	"context"
 	"embed"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,8 @@ import (
 type UserRepoImpl struct {
 	db *sqlx.DB
 }
+
+var g *gin.Context
 
 // データベースのコネクションを外側から渡せるようにすることでテストが容易になる。
 // また、関数の戻り値をインタフェース型にして構造体をreturnすると型チェックが行われる。
@@ -27,7 +30,7 @@ func NewUserRepository(db *sqlx.DB) userdm.UserRepository {
 var createUserSQL embed.FS
 
 // Create implements userdm.UserRepository
-func (repo *UserRepoImpl) Create(c *gin.Context, user *userdm.User) error {
+func (repo *UserRepoImpl) Create(c context.Context, user *userdm.User) error {
 	tmpl, err := createUserSQL.ReadFile("embed/user/create_user.sql")
 	if err != nil {
 		return err
@@ -50,7 +53,7 @@ func (repo *UserRepoImpl) Create(c *gin.Context, user *userdm.User) error {
 var findByEmailSQL embed.FS
 
 // FindByEmailID implements userdm.UserRepository
-func (repo *UserRepoImpl) FindByEmailID(c *gin.Context, email vo.Email) (*userdm.User, error) {
+func (repo *UserRepoImpl) FindByEmailID(c context.Context, email vo.Email) (*userdm.User, error) {
 	tmpl, err := findByEmailSQL.ReadFile("embed/user/find_by_email.sql")
 	if err != nil {
 		return nil, err
@@ -64,14 +67,14 @@ func (repo *UserRepoImpl) FindByEmailID(c *gin.Context, email vo.Email) (*userdm
 	}
 
 	// scanUserからdmuserへ型変換
-	return userdm.Reconstruct(c, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
+	return userdm.Reconstruct(g, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }
 
 //go:embed embed/user/find_by_user_id.sql
 var findByUserSQL embed.FS
 
 // FindByUserID implements userdm.UserRepository
-func (repo *UserRepoImpl) FindByUserID(c *gin.Context, userId userdm.UserID) (*userdm.User, error) {
+func (repo *UserRepoImpl) FindByUserID(c context.Context, userId userdm.UserID) (*userdm.User, error) {
 	tmpl, err := findByUserSQL.ReadFile("embed/user/find_by_user_id.sql")
 	if err != nil {
 		return nil, err
@@ -85,5 +88,5 @@ func (repo *UserRepoImpl) FindByUserID(c *gin.Context, userId userdm.UserID) (*u
 	}
 
 	// scanUserからdmuserへ型変換
-	return userdm.Reconstruct(c, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
+	return userdm.Reconstruct(g, scanUser.ID, scanUser.Email, scanUser.Password, scanUser.CreatedAt, scanUser.UpdatedAt)
 }

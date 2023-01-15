@@ -1,7 +1,8 @@
 package tmpblogdm
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
@@ -11,9 +12,9 @@ func NewBlogID() BlogID {
 	return BlogID(vo.NewID())
 }
 
-func NewBlogIDByStr(c *gin.Context, idStr string) BlogID {
-	id := vo.NewIDByStr(c, idStr)
-	return BlogID(id)
+func NewBlogIDByStr(c context.Context, idStr string) (BlogID, error) {
+	id, err := vo.NewIDByStr(c, idStr)
+	return BlogID(id), err
 }
 
 func (id BlogID) String() string {

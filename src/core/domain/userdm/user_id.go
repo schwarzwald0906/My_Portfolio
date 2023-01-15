@@ -1,7 +1,8 @@
 package userdm
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
@@ -11,9 +12,9 @@ func NewUserID() vo.ID {
 	return vo.NewID()
 }
 
-func NewUserIDByStr(c *gin.Context, idStr string) UserID {
-	id := vo.NewIDByStr(c, idStr)
-	return UserID(id)
+func NewUserIDByStr(c context.Context, idStr string) (UserID, error) {
+	id, err := vo.NewIDByStr(c, idStr)
+	return UserID(id), err
 }
 
 func (id UserID) String() string {
