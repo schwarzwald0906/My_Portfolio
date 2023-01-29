@@ -1,17 +1,19 @@
 package tmpblogdm
 
 import (
+	"context"
+
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
 type TmpBlogID vo.ID
 
-func NewTmpBlogID() vo.ID {
-	return vo.NewID()
+func NewTmpBlogID() TmpBlogID {
+	return TmpBlogID(vo.NewID())
 }
 
-func NewTmpBlogIDByStr(idStr string) (TmpBlogID, error) {
-	id, err := vo.NewIDByStr(idStr)
+func NewTmpBlogIDByStr(c context.Context, idStr string) (TmpBlogID, error) {
+	id, err := vo.NewIDByStr(c, idStr)
 	return TmpBlogID(id), err
 }
 

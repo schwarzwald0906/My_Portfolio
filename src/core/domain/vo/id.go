@@ -1,8 +1,10 @@
 package vo
 
 import (
+	"context"
+
 	"github.com/google/uuid"
-	"golang.org/x/xerrors"
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type ID string
@@ -11,9 +13,9 @@ func NewID() ID {
 	return ID(uuid.New().String())
 }
 
-func NewIDByStr(id string) (ID, error) {
+func NewIDByStr(c context.Context, id string) (ID, error) {
 	if id == "" {
-		return "", xerrors.New("id must be not empty")
+		return "", myerror.BadRequestWrapf("IDは必須入力です。")
 	}
 	return ID(id), nil
 }

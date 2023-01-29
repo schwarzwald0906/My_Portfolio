@@ -5,13 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/app/userapp"
+	"github.com/schwarzwald0906/My_Portfolio/src/core/config"
 	mydatabase "github.com/schwarzwald0906/My_Portfolio/src/core/infra/database"
 	"github.com/schwarzwald0906/My_Portfolio/src/core/infra/repoimpl"
 )
 
-// ルーティングを別の関数やメソッドに分割
-func UserSetupRoutes(router *gin.Engine) {
-	router.GET("/users", func(c *gin.Context) {
+// ユーザードメインに関するルーティング処理
+func UserSetupRoutes(g *gin.RouterGroup) {
+	g.GET("/users", func(c *gin.Context) {
 		// 正常系
 		if isHealthy() {
 			c.JSON(http.StatusOK, gin.H{"data": "user list"})
@@ -22,8 +23,7 @@ func UserSetupRoutes(router *gin.Engine) {
 
 	})
 
-	router.POST("/users", func(c *gin.Context) {
-		//データベース接続
+	g.POST("/users", func(c *gin.Context) {
 		repo := mydatabase.DbInit()
 		userRepo := repoimpl.NewUserRepository(repo)
 
@@ -36,11 +36,13 @@ func UserSetupRoutes(router *gin.Engine) {
 			Password: c.PostForm("password"),
 		}
 		// 一旦ハードコーディング
-		req.Email = "email@gmail.com"
+		req.Email = "email@yahoomail.com"
+		// req.Email = "emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@gmail.com"
 		req.Password = "password12345!"
 
 		if err := createUserApp.Exec(c, req); err != nil {
-			c.AbortWithStatus(500)
+			// c.AbortWithStatus(500)
+			c.Set(config.ERR_KEY, err)
 			return
 		}
 		// レスポンスを返す

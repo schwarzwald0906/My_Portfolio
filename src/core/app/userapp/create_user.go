@@ -22,24 +22,22 @@ type CreateUserRequest struct {
 	Password string
 }
 
-func (app *CreateUserApp) Exec(ctx context.Context, req *CreateUserRequest) error {
+func (app *CreateUserApp) Exec(c context.Context, req *CreateUserRequest) error {
 
-	email, err := vo.NewEmail(req.Email)
+	email, err := vo.NewEmail(c, req.Email)
 	if err != nil {
 		return err
 	}
-
-	password, err := vo.NewPassword(req.Password)
+	password, err := vo.NewPassword(c, req.Password)
 	if err != nil {
 		return err
 	}
-
 	//入力値からドメインモデルを取得
 	user, err := userdm.GenWhenCreate(email, password)
 	if err != nil {
 		return err
 	}
 	//上記で作成したuserをもとにINSERT処理を実行
-	return app.userRepository.Create(ctx, user)
+	return app.userRepository.Create(c, user)
 
 }

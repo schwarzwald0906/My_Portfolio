@@ -1,7 +1,9 @@
 package tmpblogdm
 
 import (
-	"golang.org/x/xerrors"
+	"unicode/utf8"
+
+	myerror "github.com/schwarzwald0906/My_Portfolio/src/core/myerror"
 )
 
 type TmpBlogTitle string
@@ -9,17 +11,17 @@ type TmpBlogTitle string
 const tmpBlogTitleMaxLength = 30
 
 func NewTmpBlogTitle(tmpBlogTitle string) (TmpBlogTitle, error) {
-	if len(tmpBlogTitle) > tmpBlogTitleMaxLength {
+	if length := utf8.RuneCountInString(tmpBlogTitle); length > tmpBlogTitleMaxLength {
 		return TmpBlogTitle(""),
-			xerrors.Errorf("タイトルを、%d文字以下で入力してください。現在%s文字入力されています。", tmpBlogTitleMaxLength, tmpBlogTitle)
+			myerror.BadRequestWrapf("タイトルを、%d文字以下で入力してください。現在%d文字入力されています。", tmpBlogTitleMaxLength, length)
 	}
 	return TmpBlogTitle(tmpBlogTitle), nil
 }
 
-func (e TmpBlogTitle) Value() string {
+func (e TmpBlogTitle) String() string {
 	return string(e)
 }
 
 func (e TmpBlogTitle) Equals(e2 TmpBlogTitle) bool {
-	return e.Value() == e2.Value()
+	return e.String() == e2.String()
 }

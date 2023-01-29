@@ -1,8 +1,6 @@
 package userdm
 
-import (
-	"context"
-)
+import "context"
 
 type IsDuplicatedByUserIDDomainService struct {
 	userRepository UserRepository
@@ -12,8 +10,8 @@ func NewIsDuplicatedByUserIDDomainService(userRepo UserRepository) *IsDuplicated
 	return &IsDuplicatedByUserIDDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByUserIDDomainService) Exec(ctx context.Context, userID UserID) (bool, error) {
-	user, err := ds.userRepository.FindByUserID(ctx, userID)
+func (ds *IsDuplicatedByUserIDDomainService) Exec(c context.Context, userID UserID) (bool, error) {
+	user, err := ds.userRepository.FindByUserID(c, userID)
 	if err != nil {
 		return false, err
 	}

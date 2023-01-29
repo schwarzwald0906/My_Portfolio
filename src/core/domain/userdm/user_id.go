@@ -1,6 +1,8 @@
 package userdm
 
 import (
+	"context"
+
 	"github.com/schwarzwald0906/My_Portfolio/src/core/domain/vo"
 )
 
@@ -10,8 +12,8 @@ func NewUserID() vo.ID {
 	return vo.NewID()
 }
 
-func NewUserIDByStr(idStr string) (UserID, error) {
-	id, err := vo.NewIDByStr(idStr)
+func NewUserIDByStr(c context.Context, idStr string) (UserID, error) {
+	id, err := vo.NewIDByStr(c, idStr)
 	return UserID(id), err
 }
 

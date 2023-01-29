@@ -14,8 +14,8 @@ func NewIsDuplicatedByEmailDomainService(userRepo UserRepository) *IsDuplicatedB
 	return &IsDuplicatedByEmailDomainService{userRepository: userRepo}
 }
 
-func (ds *IsDuplicatedByEmailDomainService) Exec(ctx context.Context, email vo.Email) (bool, error) {
-	user, err := ds.userRepository.FindByEmailID(ctx, email)
+func (ds *IsDuplicatedByEmailDomainService) Exec(c context.Context, email vo.Email) (bool, error) {
+	user, err := ds.userRepository.FindByEmailID(c, email)
 	if err != nil {
 		return false, err
 	}
