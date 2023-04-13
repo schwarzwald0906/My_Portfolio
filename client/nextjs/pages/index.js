@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import Layout from '../components/layout'
+import Layout, { siteTitle } from '../components/layout'
 
 import utilStyle from '../styles/util.module.css'
 import { getPostsData } from '../lib/post'
 
+//SSG
 export async function getStaticProps() {
   const allPostsData = getPostsData()
   console.log(allPostsData)
@@ -20,6 +21,9 @@ export async function getStaticProps() {
 export default function Home({ allPostsData }) {
   return (
     <Layout>
+      <Head>
+        <title>{siteTitle}</title>
+      </Head>
       <section className={utilStyle.headingMd}>
         <p>私はフルスタックエンジニアです。</p>
       </section>
